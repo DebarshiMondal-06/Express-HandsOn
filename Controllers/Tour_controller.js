@@ -2,7 +2,11 @@ const Tour = require('./../models/Tour_models');
 
 exports.get_all_tours = async (req, res) => {
     try {
-        const all_tour = await Tour.find();
+        console.log(req.query);
+
+        const all_tour = await Tour.find(req.query); // default express filtering............
+
+        // const all_tour = await Tour.find().where('duration').gt(5); // mongoose filtering method..............
         res.status(200).json({
             status: 'success',
             data: {
