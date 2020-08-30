@@ -33,6 +33,17 @@ exports.get_all_tours = async (req, res) => {
         }
 
         // 3) Limiting fields ...........................
+        if (req.query.fields) {
+            const sortBy = req.query.fields.split(',').join(' ');
+            // console.log(sortBy);
+            query = query.select(sortBy);
+        }
+        else {
+            query = query.select('-__v');
+        }
+
+
+
 
         // Executing Query ............
         const all_tour = await query;
