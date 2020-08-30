@@ -1,12 +1,41 @@
 const Tour = require('./../models/Tour_models');
+const { deleteMany } = require('./../models/Tour_models');
+const { query } = require('express');
 
 exports.get_all_tours = async (req, res) => {
     try {
-        console.log(req.query);
+        // Building Query ..........................
+        // 1) Filtering......
+        const queryObj = { ...req.query };
+        const excludeFields = ['page', 'sort', 'limit', 'fields'];
+        excludeFields.forEach((el) => delete queryObj[el]);
+        // console.log(queryObj);
 
-        const all_tour = await Tour.find(req.query); // default express filtering............
 
-        // const all_tour = await Tour.find().where('duration').gt(5); // mongoose filtering method..............
+        // 2) Advanced Filtering ....................
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (matc) => `$${matc}`);
+        // b for exact value and g for multiple replace value............
+        // replace first param replacer and second param replace value....
+
+
+        let query = Tour.find(JSON.parse(queryStr)); // default express filtering............
+
+
+        // 2) Sorting ....................
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            console.log(sortBy);
+            query = query.sort(sortBy);
+        }
+        else {
+            query = query.sort('-createdAt');
+        }
+
+        // 3) Limiting fields ...........................
+
+        // Executing Query ............
+        const all_tour = await query;
         res.status(200).json({
             status: 'success',
             data: {
