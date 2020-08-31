@@ -1,54 +1,82 @@
 const Tour = require('./../models/Tour_models');
-const { deleteMany } = require('./../models/Tour_models');
-const { query } = require('express');
+
+exports.best_5_middleware = (req, res, next) => {
+    req.query.limit = '5';
+    req.query.sort = "-ratingAverage";
+    req.query.fields = 'name,price,ratingAverage,difficulty';
+    next();
+};
+
+
+class APIFeatures {
+    constructor(query, queryString) {
+        this.queryy = query;
+        this.queryString = queryString;
+    } // mongoose query "Tour" and express querystring from routes...
+
+    filter() {
+        const queryObj = { ...this.queryString }; // This Takeout all the keyvalue pair of document and {} this assign keyvalue to new object.
+        const excludeFields = ['page', 'sort', 'limit', 'fields', 'specefic']; // Deleting all the extra fields except keyvalue pair
+        excludeFields.forEach((el) => delete queryObj[el]);
+
+        this.queryy = this.queryy.find(queryObj);
+
+        return this; // this here refers to Class name.........
+
+    }
+
+    sort() {
+        if (this.queryString.sort) {
+            const sortBy = this.queryString.sort.split(',').join(' ');
+
+            this.queryy = this.queryy.sort(sortBy);
+        }
+        return this;
+    }
+
+    limitFields() {
+        if (this.queryString.fields) {
+            const sortBy = this.queryString.fields.split(',').join(' ');
+            this.queryy = this.queryy.select(sortBy);
+        }
+        else {
+            this.queryy = this.queryy.select('-__v -createdAt');
+        }
+        return this;
+    }
+
+    limits() {
+        if (this.queryString.limit) {
+            const limit_data = this.queryString.limit * 1 || 100;
+            this.queryy = this.queryy.limit(limit_data);
+        }
+        return this;
+    }
+
+}
+
 
 exports.get_all_tours = async (req, res) => {
     try {
-        // Building Query ..........................
-        // 1) Filtering......
-        const queryObj = { ...req.query };
-        const excludeFields = ['page', 'sort', 'limit', 'fields'];
-        excludeFields.forEach((el) => delete queryObj[el]);
-        // console.log(queryObj);
 
+        // 2) Advanced Filtering ........................
+        // let queryStr = JSON.stringify(queryObj);
+        // queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (matc) => `$${matc}`);
+        // // b for exact value and g for multiple replace value............
+        // // replace first param replacer and second param replace value....
 
-        // 2) Advanced Filtering ....................
-        let queryStr = JSON.stringify(queryObj);
-        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (matc) => `$${matc}`);
-        // b for exact value and g for multiple replace value............
-        // replace first param replacer and second param replace value....
+        const features = new APIFeatures(Tour, req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .limits();
 
+        // Executing Query ..............................
+        const all_tour = await features.queryy;
 
-        let query = Tour.find(JSON.parse(queryStr)); // default express filtering............
-
-
-        // 2) Sorting ....................
-        if (req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ');
-            console.log(sortBy);
-            query = query.sort(sortBy);
-        }
-        else {
-            query = query.sort('-createdAt');
-        }
-
-        // 3) Limiting fields ...........................
-        if (req.query.fields) {
-            const sortBy = req.query.fields.split(',').join(' ');
-            // console.log(sortBy);
-            query = query.select(sortBy);
-        }
-        else {
-            query = query.select('-__v');
-        }
-
-
-
-
-        // Executing Query ............
-        const all_tour = await query;
         res.status(200).json({
             status: 'success',
+            size: all_tour.length,
             data: {
                 result: all_tour
             }
