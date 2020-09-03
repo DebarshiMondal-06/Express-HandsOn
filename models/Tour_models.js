@@ -55,19 +55,30 @@ const TourSchema = new mongoose.Schema({
             type: Date,
             default: Date.now()
       },
-      startDates: [Date]
+      startDates: [Date],
+      secretKey: {
+            type: Boolean,
+            default: false
+      }
 });
-// Document Middleware...............................................
-TourSchema.pre('save', function (next) {
+// Document Middleware..........for .save() and .Create()...........................
+TourSchema.pre('save', function (next) { // 'save-pre hooks always run before exectution and method save is for post query...........'
       this.slug = slugify(this.name, {
             lower: true
       });
       next();
 });
 
-//QUERY Middleware ..............................................
-
-
+//QUERY Middleware .............for .find() and .update()  .........................
+TourSchema.pre(/^find/, function (next) {  // 'pre' always run before a query exeecute.............
+      this.find({ secretKey: { $ne: true } });
+      this.start = new Date();
+      next();
+});
+TourSchema.post(/^find/, function (docs, next) { // 'post' always run after a query exeecute.............
+      console.log(`the time taken to execute query is ${Date.now() - this.start} milliseconds`);
+      next();
+});
 
 const Tour = mongoose.model('Tour', TourSchema);
 // Ends here Schema **************************
