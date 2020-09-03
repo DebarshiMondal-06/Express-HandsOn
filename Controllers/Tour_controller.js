@@ -167,7 +167,10 @@ exports.get_tour_stats = async (req, res) => {
     try {
         const stats = await Tour.aggregate([
             {
-                $match: { ratingAverage: { $gt: 4 } }
+                $match: {
+                    ratingAverage: { $gt: 4.4 }
+                    // secretKey: { $ne: true }
+                }
             },
             {
                 $group: {
@@ -181,7 +184,7 @@ exports.get_tour_stats = async (req, res) => {
                 }
             },
             {
-                $sort: { numTours: 1 }
+                $sort: { avgPrice: -1 }
             }
         ]);
         res.status(200).json({
@@ -218,7 +221,7 @@ exports.get_monthly_plan = async (req, res) => {
                     _id: { $month: '$startDates' },
                     numTourStarts: { $sum: 1 },
                     toursName: { $push: '$name' },
-                    Tourduration: { $push: '$duration' },
+                    avgPriceofMonth: { $avg: '$price' }
                 }
             },
             {
@@ -229,7 +232,7 @@ exports.get_monthly_plan = async (req, res) => {
                 }
             },
             {
-                $sort: { numTourStarts: -1 }
+                $sort: { avgPriceofMonth: -1 }
             }
         ]);
         res.status(200).json({

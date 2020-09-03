@@ -80,6 +80,16 @@ TourSchema.post(/^find/, function (docs, next) { // 'post' always run after a qu
       next();
 });
 
+// Aggregrate Middleware................ for .aggreate middleware ..............................
+TourSchema.pre('aggregate', function (next) {
+      this.pipeline().unshift({
+            $match: {
+                  secretKey: { $ne: true }
+            }
+      });
+      next();
+});
+
 const Tour = mongoose.model('Tour', TourSchema);
 // Ends here Schema **************************
 
