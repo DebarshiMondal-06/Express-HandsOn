@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const slugify = require('slugify');
 
 // Building a Tour Schema ***************************
 const TourSchema = new mongoose.Schema({
@@ -9,6 +9,7 @@ const TourSchema = new mongoose.Schema({
             unique: true,
             trim: true
       },
+      slug: String,
       ratingAverage: {
             type: Number,
             default: 4.5
@@ -56,6 +57,18 @@ const TourSchema = new mongoose.Schema({
       },
       startDates: [Date]
 });
+// Document Middleware...............................................
+TourSchema.pre('save', function (next) {
+      this.slug = slugify(this.name, {
+            lower: true
+      });
+      next();
+});
+
+//QUERY Middleware ..............................................
+
+
+
 const Tour = mongoose.model('Tour', TourSchema);
 // Ends here Schema **************************
 
