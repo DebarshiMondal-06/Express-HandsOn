@@ -5,7 +5,7 @@ const slugify = require('slugify');
 const TourSchema = new mongoose.Schema({
       name: {
             type: String,
-            required: true,
+            required: true, //Custom validator........................
             unique: true,
             trim: true
       },
@@ -22,7 +22,15 @@ const TourSchema = new mongoose.Schema({
             type: Number,
             required: [true, 'A tour must have a Price']
       },
-      priceDiscount: Number,
+      discountPrice: {
+            type: Number,
+            validate: { // Custom validation .....................................
+                  validator: function (val) {
+                        return val < this.price; //this only points to newly created doc for New Document not on update...................
+                  },
+                  message: 'Discount Price ({VALUE}) must be lesser than Original Price.....'
+            },
+      },
       duration: {
             type: Number,
             required: [true, 'A tour must have a duration']
