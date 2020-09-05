@@ -5,6 +5,9 @@ const Tour_Router = require('./Routes/Tour_Routes');
 const User_Router = require('./Routes/User_Routes');
 app.use(express.json());
 
+const AppError = require('./appError.js');
+const { errorfunction } = require('./Controllers/errorHandleController.js');
+
 
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);
@@ -17,25 +20,17 @@ app.all('*', (req, res, next) => {
       //       body: `No such ${req.OriginalUrl} request to proceed!`
       // })
 
-      const err = new Error(`No such ${req.OriginalUrl} request to proceed!`);
-      err.status = 'fail';
-      err.statusCode = 404;
+      // const err = new Error(`No such ${req.OriginalUrl} request to proceed!`);
+      // err.status = 'fail';
+      // err.statusCode = 404;
+      // next(err); //err here simpify assumes an error and sends it to global error middleware.........
 
-      next(err); //err here simpify assumes an error and sends it to global error middleware.........
-
+      next(new AppError(`No such ${req.OriginalUrl} request to proceed!`, 404));
 });
 
 
-// Global error middleware........................
-app.use((error, req, res, next) => {
-      error.status = error.status || 'error';
-      error.statusCode = error.statusCode || 500;
-
-      res.status(error.statusCode).json({
-            status: error.status,
-            message: error.message
-      });
-});
+// Global errorhandle middleware........................
+app.use(errorfunction);
 
 
 module.exports = app;
