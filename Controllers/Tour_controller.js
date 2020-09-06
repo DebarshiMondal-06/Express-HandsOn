@@ -1,5 +1,6 @@
 const Tour = require('./../models/Tour_models');
 const { stat } = require('fs');
+const AppError = require('../appError');
 
 exports.best_5_middleware = (req, res, next) => {
     req.query.limit = '5';
@@ -108,15 +109,21 @@ exports.create_tours = async (req, res) => {
     }
 }
 
-exports.get_tour = async (req, res) => {
+exports.get_tour = async (req, res, next) => {
     try {
         const single_tour = await Tour.findById(req.params.id);
+
+        if (!single_tour) {
+            return next(new AppError("Tour ID not found!", 404));
+        }
+
         res.status(200).json({
             status: "success",
             data: {
                 result: single_tour
             }
         });
+
     } catch (error) {
         res.status(400).json({
             status: 'Fail',
@@ -125,11 +132,14 @@ exports.get_tour = async (req, res) => {
     }
 }
 
-exports.update_tour = async (req, res) => {
+exports.update_tour = async (req, res, next) => {
     try {
         const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
             new: true
         });
+        if (!update) {
+            return next(new AppError("Tour ID not found!", 404));
+        }
         res.status(200).json({
             status: "Updated",
             data: {
@@ -146,9 +156,12 @@ exports.update_tour = async (req, res) => {
 
 
 
-exports.delete_a_tour = async (req, res) => {
+exports.delete_a_tour = async (req, res, next) => {
     try {
         const tour_delete = await Tour.findByIdAndDelete(req.params.id);
+        if (!tour_delete) {
+            return next(new AppError("Tour ID not found!", 404));
+        }
         res.status(200).json({
             status: "deleted",
             message: "No Content"
