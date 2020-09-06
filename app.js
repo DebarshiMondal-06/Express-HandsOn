@@ -26,7 +26,7 @@ app.all('*', (req, res, next) => {
       // next(err); //err here simpify assumes an error and sends it to global error middleware.........
 
       next(new AppError(`No such ${req.originalUrl} request to proceed!`, 404));
-      console.log(req);
+      // console.log(req);
 });
 
 

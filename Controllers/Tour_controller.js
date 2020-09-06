@@ -102,10 +102,25 @@ exports.create_tours = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(400).json({
-            status: 'Fail',
-            message: error
-        })
+        if (error.code === 11000) {
+            res.status(400).json({
+                status: 'Fail',
+                value: error.keyValue.name,
+                message: "Duplicate entry"
+            });
+        }
+        if (error.errors) {
+            res.status(400).json({
+                status: 'Validation Error',
+                message: Object.values(error.errors).map((el) => (el.message)).join(" , "),
+            });
+        }
+        else {
+            res.status(400).json({
+                status: 'Fail',
+                error: error
+            });
+        }
     }
 }
 
@@ -125,10 +140,12 @@ exports.get_tour = async (req, res, next) => {
         });
 
     } catch (error) {
-        res.status(400).json({
-            status: 'Fail',
-            message: error
-        });
+        if (error.kind === "ObjectId") {
+            res.status(400).json({
+                status: 'Fail',
+                message: `Invalid Id: ${error.value}`
+            });
+        }
     }
 }
 
@@ -147,10 +164,12 @@ exports.update_tour = async (req, res, next) => {
             }
         });
     } catch (error) {
-        res.status(400).json({
-            status: 'Fail',
-            message: error
-        });
+        if (error.kind === "ObjectId") {
+            res.status(400).json({
+                status: 'Fail',
+                message: `Invalid Id: ${error.value}`
+            });
+        }
     }
 }
 
@@ -167,10 +186,12 @@ exports.delete_a_tour = async (req, res, next) => {
             message: "No Content"
         });
     } catch (error) {
-        res.status(400).json({
-            status: 'Fail',
-            message: error
-        });
+        if (error.kind === "ObjectId") {
+            res.status(400).json({
+                status: 'Fail',
+                message: `Invalid Id: ${error.value}`
+            });
+        }
     }
 }
 

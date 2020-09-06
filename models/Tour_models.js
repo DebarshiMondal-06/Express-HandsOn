@@ -74,13 +74,14 @@ TourSchema.pre('save', function (next) { // 'save-pre hooks always run before ex
       this.slug = slugify(this.name, {
             lower: true
       });
+      next();
       if (this.price > this.discountPrice) {
             return true;
       }
       else {
             return false;
       }
-      next();
+
 });
 
 //QUERY Middleware .............for .find() and .update()  .........................
