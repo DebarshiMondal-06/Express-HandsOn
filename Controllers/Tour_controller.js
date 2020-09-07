@@ -14,10 +14,13 @@ class APIFeatures {
     constructor(query, queryString) {
         this.queryy = query;
         this.queryString = queryString;
+
     } // mongoose query "Tour" and express querystring from routes...
+
 
     filter() {
         const queryObj = { ...this.queryString }; // This Takeout all the keyvalue pair of document and {} this assign keyvalue to new object.
+
         const excludeFields = ['page', 'sort', 'limit', 'fields', 'specefic']; // Deleting all the extra fields except keyvalue pair
         excludeFields.forEach((el) => delete queryObj[el]);
 
@@ -31,7 +34,7 @@ class APIFeatures {
         if (this.queryString.sort) {
             const sortBy = this.queryString.sort.split(',').join(' ');
             console.log(sortBy);
-            this.queryy = this.queryy.sort(sortBy);
+            this.queryy = this.queryy.sort(sortBy)
         }
         return this;
     }
