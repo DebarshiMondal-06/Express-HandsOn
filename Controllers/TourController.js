@@ -1,4 +1,4 @@
-const Tour = require('./../models/Tour_models');
+const Tour = require('../models/Tour_models');
 const { stat } = require('fs');
 const AppError = require('../Classes/appError');
 const APIFeatures = require('../Classes/ClassAPIFeatures');

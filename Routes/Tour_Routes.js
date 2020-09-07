@@ -1,5 +1,5 @@
 const express = require('express');
-const { get_monthly_plan, get_tour_stats, get_all_tours, create_tours, get_tour, delete_a_tour, update_tour, best_5_middleware } = require('../Controllers/Tour_controller.js');
+const { get_monthly_plan, get_tour_stats, get_all_tours, create_tours, get_tour, delete_a_tour, update_tour, best_5_middleware } = require('../Controllers/TourController.js');
 const Tour = require('../models/Tour_models.js');
 const Tour_Router = express.Router();
 
