@@ -95,10 +95,7 @@ exports.get_tour = async (req, res, next) => {
 
     } catch (error) {
         if (error.kind === "ObjectId") {
-            res.status(400).json({
-                status: 'Fail',
-                message: `Invalid Id: ${error.value}`
-            });
+            return next(new AppError(`Invalid Id: ${error.value} doesn't exist!`, 404));
         }
     }
 }
