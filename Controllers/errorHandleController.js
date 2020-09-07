@@ -1,4 +1,4 @@
-const AppError = require("../appError");
+const AppError = require("../Classes/appError");
 
 // const dbError = (err) => {
 //       const message = `Invalid Id : ${err.value}`;
