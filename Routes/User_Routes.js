@@ -6,7 +6,7 @@ const User_Router = express.Router();
 
 
 User_Router.post('/signup', authController.signup);
-
+User_Router.post('/login', authController.login);
 
 // Rest like architecture......................
 User_Router.route('/')
