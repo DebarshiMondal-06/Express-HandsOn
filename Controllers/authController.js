@@ -16,18 +16,16 @@ exports.signup = async (req, res, next) => {
 			password: req.body.password,
 			confirmPassword: req.body.confirmPassword
 		});
-		const token = getToken(user._id);
+		const token = await getToken(user._id);
 		res.status(404).json({
 			status: "Success",
 			U_token: token,
 			result: user
 		});
 	} catch (error) {
-		return next(new AppError(`${error}`, 404));
+		return next(new AppError(`${error}`, 401));
 	}
 }
-
-
 
 
 exports.login = async (req, res, next) => {
@@ -42,7 +40,7 @@ exports.login = async (req, res, next) => {
 
 
 		if (!loginuser || !correct) {
-			return next(new AppError(`Incorrect email or password`, 404));
+			return next(new AppError(`Incorrect email or password`, 401));
 		}
 		const token = await getToken(loginuser._id);
 		res.status(200).json({
@@ -53,6 +51,25 @@ exports.login = async (req, res, next) => {
 		return next(new AppError(`${error}`, 404));
 	}
 }
+
+
+exports.protect = (req, res, next) => {
+	// 1) getting token and checks it there.............
+
+	let verifyToken;
+	if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+		verifyToken = req.headers.authorization.split(' ')[1];
+		// console.log(verifyToken);
+	}
+	if (!verifyToken) {
+		return next(new AppError(`Logined Failed! Please try again to get access.`, 401));
+	}
+
+	// 2.) Verification Token .........................................
+	next();
+}
+
+
 
 
 

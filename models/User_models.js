@@ -49,6 +49,7 @@ UserSchema.pre('find', async function (next) {
 	next();
 });
 
+
 UserSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
 	return await bcryptjs.compare(candidatePassword, userPassword); // comparing.............
 }

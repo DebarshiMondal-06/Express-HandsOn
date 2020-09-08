@@ -10,7 +10,7 @@ User_Router.post('/login', authController.login);
 
 // Rest like architecture......................
 User_Router.route('/')
-      .get(UserController.get_all_users)
+      .get(authController.protect, UserController.get_all_users)
       .post(UserController.create_user); //Mounting Routes.....................
 
 User_Router.route('/:id')
