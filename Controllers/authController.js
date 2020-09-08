@@ -1,11 +1,17 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
+const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+
 
 const getToken = async (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
 		expiresIn: process.env.JWT_EXPIRES_IN
 	});
+}
+
+const verificationtoken = async (token, secret) => {
+	return jwt.verify(token, secret);
 }
 
 exports.signup = async (req, res, next) => {
@@ -36,10 +42,10 @@ exports.login = async (req, res, next) => {
 		}
 
 		const loginuser = await User.findOne({ email }).select('+password');
-		const correct = await loginuser.correctPassword(C_password, loginuser.password); // return true or false
+		// const correct = ; // return true or false
 
 
-		if (!loginuser || !correct) {
+		if (!loginuser || !await loginuser.correctPassword(C_password, loginuser.password)) {
 			return next(new AppError(`Incorrect email or password`, 401));
 		}
 		const token = await getToken(loginuser._id);
@@ -53,20 +59,32 @@ exports.login = async (req, res, next) => {
 }
 
 
-exports.protect = (req, res, next) => {
-	// 1) getting token and checks it there.............
+exports.protect = async (req, res, next) => {
+	try {
+		// 1) getting token and checks it there.............
+		let verifyToken;
+		if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+			verifyToken = req.headers.authorization.split(' ')[1];
+			// console.log(verifyToken);
+		}
+		if (!verifyToken) {
+			return next(new AppError(`Logined Failed! Please try again to get access.`, 401));
+		}
 
-	let verifyToken;
-	if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-		verifyToken = req.headers.authorization.split(' ')[1];
-		// console.log(verifyToken);
-	}
-	if (!verifyToken) {
-		return next(new AppError(`Logined Failed! Please try again to get access.`, 401));
-	}
+		// 2.) Verification Token .........................................
+		const decode = await verificationtoken(verifyToken, process.env.JWT_SECRET);
+		console.log(decode);
 
-	// 2.) Verification Token .........................................
-	next();
+		next();
+
+	} catch (error) {
+		if (error.name === "JsonWebTokenError") {
+			return next(new AppError(`Invalid token, Please logined Again`, 401));
+		}
+		if (error.name === "TokenExpiredError") {
+			return next(new AppError(`Token Expires, Please logined Again`, 401));
+		}
+	}
 }
 
 
