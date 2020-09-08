@@ -32,6 +32,7 @@ const UserSchema = new mongoose.Schema({
 		}
 
 	},
+	passwordChangedAt: Date,
 	photo: String,
 
 });
@@ -52,6 +53,13 @@ UserSchema.pre('find', async function (next) {
 
 UserSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
 	return await bcryptjs.compare(candidatePassword, userPassword); // comparing.............
+} // Instance Method......................
+
+UserSchema.methods.changePasswordAdter = function (JWTTimestamp) {
+	if (this.passwordChangedAt) {
+		console.log(this.passwordChangedAt, JWTTimestamp);
+	}
+	return false;
 }
 
 

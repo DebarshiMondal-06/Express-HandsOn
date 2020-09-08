@@ -75,6 +75,15 @@ exports.protect = async (req, res, next) => {
 		const decode = await verificationtoken(verifyToken, process.env.JWT_SECRET);
 		console.log(decode);
 
+		// 3.) Check if user still exists................................
+		const freshUser = await User.findById(decode.id);
+		if (!freshUser) {
+			return next(new AppError(`The token doesn't exists longer`, 401));
+		}
+
+		// 4.) Check if user changed password after token created
+		
+
 		next();
 
 	} catch (error) {
