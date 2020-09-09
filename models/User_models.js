@@ -32,9 +32,10 @@ const UserSchema = new mongoose.Schema({
 		}
 
 	},
-	passwordChangedAt: Date,
-	photo: String,
-
+	passwordChangedAt: {
+		type: Date,
+	}
+	// photo: String
 });
 
 UserSchema.pre('save', async function (next) {
@@ -55,12 +56,15 @@ UserSchema.methods.correctPassword = async function (candidatePassword, userPass
 	return await bcryptjs.compare(candidatePassword, userPassword); // comparing.............
 } // Instance Method......................
 
-UserSchema.methods.changePasswordAdter = function (JWTTimestamp) {
+UserSchema.methods.changePasswordAfter = function (JWTTimestamp) {
 	if (this.passwordChangedAt) {
-		console.log(this.passwordChangedAt, JWTTimestamp);
+		const chnagedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000,10);
+		// console.log(chnagedTimestamp, JWTTimestamp);
+		return JWTTimestamp < chnagedTimestamp;
 	}
+	// false means not changed............
 	return false;
-}
+};
 
 
 const User = mongoose.model('User', UserSchema);

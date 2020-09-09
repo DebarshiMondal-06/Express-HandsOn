@@ -2,6 +2,7 @@ const express = require('express');
 const { get_monthly_plan, get_tour_stats, get_all_tours, create_tours, get_tour, delete_a_tour, update_tour, best_5_middleware } = require('../Controllers/TourController.js');
 const Tour = require('../models/Tour_models.js');
 const Tour_Router = express.Router();
+const authController = require('../Controllers/authController');
 
 
 Tour_Router.route('/best-5-tours').get(best_5_middleware, get_all_tours);
@@ -11,7 +12,7 @@ Tour_Router.route('/monthly-plan/:year').get(get_monthly_plan);
 
 
 Tour_Router.route('/')
-      .get(get_all_tours)
+      .get(authController.protect, get_all_tours)
       .post(create_tours);
 
 Tour_Router.route('/:id')

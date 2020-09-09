@@ -1,6 +1,5 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
-const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 
 
@@ -73,17 +72,20 @@ exports.protect = async (req, res, next) => {
 
 		// 2.) Verification Token .........................................
 		const decode = await verificationtoken(verifyToken, process.env.JWT_SECRET);
-		console.log(decode);
+
 
 		// 3.) Check if user still exists................................
-		const freshUser = await User.findById(decode.id);
-		if (!freshUser) {
-			return next(new AppError(`The token doesn't exists longer`, 401));
+		const CurrentUser = await User.findById(decode.id);           //finding single ID......
+		if (!CurrentUser) {
+			return next(new AppError(`User doesn't exists longer!`, 401));
 		}
 
 		// 4.) Check if user changed password after token created
-		
+		if (CurrentUser.changePasswordAfter(decode.iat)) {
+			return next(new AppError(`User recently chnged password! Please login Again`, 401));
+		}
 
+		// Grant Access to Protected Route......................
 		next();
 
 	} catch (error) {
@@ -93,20 +95,8 @@ exports.protect = async (req, res, next) => {
 		if (error.name === "TokenExpiredError") {
 			return next(new AppError(`Token Expires, Please logined Again`, 401));
 		}
+		else {
+			return next(new AppError(`${error}`, 404));
+		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
