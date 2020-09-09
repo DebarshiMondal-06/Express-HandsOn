@@ -1,6 +1,7 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
 const jwt = require('jsonwebtoken');
+const { removeListener } = require('../models/User_models');
 
 
 const getToken = async (id) => {
@@ -19,7 +20,8 @@ exports.signup = async (req, res, next) => {
 			name: req.body.name,
 			email: req.body.email,
 			password: req.body.password,
-			confirmPassword: req.body.confirmPassword
+			confirmPassword: req.body.confirmPassword,
+			role: req.body.role
 		});
 		const token = await getToken(user._id);
 		res.status(404).json({
@@ -86,6 +88,7 @@ exports.protect = async (req, res, next) => {
 		}
 
 		// Grant Access to Protected Route......................
+		req.user = CurrentUser;
 		next();
 
 	} catch (error) {
@@ -98,5 +101,16 @@ exports.protect = async (req, res, next) => {
 		else {
 			return next(new AppError(`${error}`, 404));
 		}
+	}
+}
+
+exports.restrict = (...roles) => { // Closure // We cannot pass arguments to a middleware function..... so for that we need an arbutarty method...  
+	return (req, res, next) => { //middlware function........
+		// roles is an array like ['admin'] 
+		if (!roles.includes(req.user.role)) { //roles is accessed beacause of Closure (Lexial scoping)........
+			return next(new AppError(`You are not authorized to do this actions`, 403));
+		}
+		console.log(req.user.role);
+		next();
 	}
 }

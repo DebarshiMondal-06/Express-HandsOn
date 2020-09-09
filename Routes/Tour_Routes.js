@@ -12,13 +12,13 @@ Tour_Router.route('/monthly-plan/:year').get(get_monthly_plan);
 
 
 Tour_Router.route('/')
-      .get(authController.protect, get_all_tours)
+      .get(authController.protect, authController.restrict('admin'), get_all_tours)
       .post(create_tours);
 
 Tour_Router.route('/:id')
       .get(get_tour)
       .patch(update_tour)
-      .delete(delete_a_tour);
+      .delete(authController.protect, authController.restrict('admin'), delete_a_tour);
 
 
 
