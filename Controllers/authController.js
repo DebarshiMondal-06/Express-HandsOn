@@ -174,7 +174,7 @@ exports.resetPassowrd = async (req, res, next) => {
 		res.status(404).json({
 			status: "Success",
 			U_token: token,
-			result: userReques
+			result: userRequest
 		});
 		// 3) update changed password 
 
