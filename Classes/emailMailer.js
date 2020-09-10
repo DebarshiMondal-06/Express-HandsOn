@@ -1,20 +1,20 @@
 const nodemailer = require('nodemailer');
-const { options } = require('../Routes/User_Routes');
+const AppError = require('./appError');
 
 const sendEmail = async (options) => {
 	// 1) Create a transpoter.........
 	const transpoter = nodemailer.createTransport({
-		host: process.env.EMAIL_HOST,
-		port: process.env.EMAIL_PORT,
+		host: "smtp.mailtrap.io",
+		port: 2525,
 		auth: {
-			user: process.env.EMAIL_USERANME,
-			pass: process.env.EMAIL_PASSWORD
+			user: "c2e11b2e40fe93",
+			pass: "eba0f7cfe2a78d"
 		}
-	})
+	});
 
 	// 2) Define the email options....
 	const mailoptions = {
-		from: 'Debarshi Mondal <debopiku1122@gmail.com>',
+		from: 'Debarshi Mondal <debopiku@gmail.com>',
 		to: options.email,
 		subject: options.subject,
 		text: options.message

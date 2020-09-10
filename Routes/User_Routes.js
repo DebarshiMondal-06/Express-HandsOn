@@ -9,7 +9,7 @@ User_Router.post('/signup', authController.signup);
 User_Router.post('/login', authController.login);
 
 User_Router.post('/forgotPassword', authController.forgotpassword);
-User_Router.patch('/resetPassowrd/:token', authController.resetPassowrd);
+User_Router.patch('/resetPassword/:token', authController.resetPassowrd);
 
 
 // Rest like architecture......................
