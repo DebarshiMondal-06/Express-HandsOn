@@ -3,13 +3,14 @@ const AppError = require('../Classes/appError');
 
 // Filtering Req. Key name....................
 const filterObj = (obj, ...allowedfields) => {
-      // console.log(allowedfields);
+      // console.log(obj);
       const newObj = {};
       Object.keys(obj).forEach((el) => {
             if (allowedfields.includes(el)) {
                   newObj[el] = obj[el];
             }
       });
+      console.log(newObj);
       return newObj;
 }
 
@@ -29,7 +30,6 @@ exports.updateMe = async (req, res, next) => {
             if (!email || !name) {
                   return next(new AppError(`Email and name is required for Updation`, 404));
             }
-
             const fitlerBody = filterObj(req.body, "email", "name");
             const findUser = await User.findByIdAndUpdate(req.user._id, fitlerBody, {
                   new: true,
