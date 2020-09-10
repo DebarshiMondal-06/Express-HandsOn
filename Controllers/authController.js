@@ -35,8 +35,7 @@ exports.login = async (req, res, next) => {
 		if (!email || !C_password) {
 			return next(new AppError('Please provide Email and Password!', 404));
 		}
-
-		const loginuser = await User.findOne({ email }).select('+password');
+		const loginuser = await User.findOne({ email, Active: {$ne : false} }).select('+password');
 		// const correct = ; // return true or false
 
 
@@ -68,7 +67,7 @@ exports.protect = async (req, res, next) => {
 
 		// 2.) Verification Token .........................................
 		const decode = await verificationtoken(verifyToken, process.env.JWT_SECRET);
-
+		// console.log(decode);
 
 		// 3.) Check if user still exists................................
 		const CurrentUser = await User.findById(decode.id);           //finding single ID......
@@ -152,7 +151,7 @@ exports.resetPassowrd = async (req, res, next) => {
 			.createHash('sha256')
 			.update(req.params.token)
 			.digest('hex');
-		
+
 		const userRequest = await User.findOne(
 			{
 				passwordResetToken: hashedToken,

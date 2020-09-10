@@ -5,12 +5,12 @@ const AppError = require('../Classes/appError');
 const filterObj = (obj, ...allowedfields) => {
       // console.log(obj);
       const newObj = {};
-      Object.keys(obj).forEach((el) => {
+      Object.keys(obj).forEach((el) => { // returns an array Object.keys............................
             if (allowedfields.includes(el)) {
                   newObj[el] = obj[el];
             }
       });
-      console.log(newObj);
+      // console.log(newObj); 
       return newObj;
 }
 
@@ -43,6 +43,18 @@ exports.updateMe = async (req, res, next) => {
             return next(new AppError(`${error}`, 401));
       }
 }
+
+exports.deleteMe = async (req, res, next) => {
+      if (req.user.role == 'admin') {
+            return next(new AppError(`User can be deactivated! as User is Admin!`, 500));
+      }
+      await User.findByIdAndUpdate(req.user._id, { Active: false });
+      res.status(204).json({
+            status: "Success",
+            message: null
+      });
+}
+
 
 exports.create_user = (req, res) => {
       res.status(500).json({

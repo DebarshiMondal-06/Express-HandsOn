@@ -43,7 +43,12 @@ const UserSchema = new mongoose.Schema({
         default: "user"
     },
     passwordResetToken: String,
-    passwordResetExpires: Date
+    passwordResetExpires: Date,
+    Active: {
+        type: Boolean,
+        default: true,
+        select: false
+    }
 });
 
 UserSchema.pre('save', async function (next) {
@@ -93,6 +98,10 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
+UserSchema.pre(/^find/, function (next) {
+    this.find({ Active: { $ne: false } });
+    next();
+});
 
 
 

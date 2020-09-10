@@ -12,10 +12,12 @@ User_Router.post('/forgotPassword', authController.forgotpassword);
 User_Router.patch('/resetPassword/:token', authController.resetPassowrd);
 
 User_Router.put('/updateMe', authController.protect, UserController.updateMe);
+User_Router.delete('/deleteMe', authController.protect, UserController.deleteMe);
+
 
 // Rest like architecture......................
 User_Router.route('/')
-      .get(authController.protect, UserController.get_all_users)
+      .get(authController.protect, authController.restrict('admin'), UserController.get_all_users)
       .post(UserController.create_user); //Mounting Routes.....................
 
 User_Router.route('/:id')
