@@ -11,7 +11,7 @@ User_Router.post('/login', authController.login);
 User_Router.post('/forgotPassword', authController.forgotpassword);
 User_Router.patch('/resetPassword/:token', authController.resetPassowrd);
 
-User_Router.put('/updateMe', UserController.updateMe);
+User_Router.put('/updateMe', authController.protect, UserController.updateMe);
 
 // Rest like architecture......................
 User_Router.route('/')
