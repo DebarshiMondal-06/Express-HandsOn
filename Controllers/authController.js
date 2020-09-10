@@ -2,6 +2,7 @@ const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
 const jwt = require('jsonwebtoken');
 const { removeListener } = require('../models/User_models');
+const sendEmail = require('../Classes/emailMailer');
 
 
 const getToken = async (id) => {
@@ -16,13 +17,7 @@ const verificationtoken = async (token, secret) => {
 
 exports.signup = async (req, res, next) => {
 	try {
-		const user = await User.create({
-			name: req.body.name,
-			email: req.body.email,
-			password: req.body.password,
-			confirmPassword: req.body.confirmPassword,
-			role: req.body.role
-		});
+		const user = await User.create(req.body);
 		const token = await getToken(user._id);
 		res.status(404).json({
 			status: "Success",
@@ -112,5 +107,28 @@ exports.restrict = (...roles) => { // Closure // We cannot pass arguments to a m
 		}
 		console.log(req.user.role);
 		next();
+	}
+}
+
+exports.forgotpassword = async (req, res, next) => {
+	try {
+		// 1) get user based on posted Email 
+		const { email } = req.body;
+		const user = await User.findOne({ email });
+		if (!user) {
+			return next(new AppError(`There is no user with this email`, 404));
+		}
+
+		// 2) Generate random token... 
+		const resetToken = await user.createPasswordResetToken();
+		await user.save({ validateBeforeSave: false });
+
+
+		// // 3) send it via email 
+		// const ressetUrl = `${req.protocol}://`
+
+
+	} catch (error) {
+		return next(new AppError(`${error}`, 404));
 	}
 }

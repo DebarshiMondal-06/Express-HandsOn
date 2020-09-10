@@ -8,6 +8,10 @@ const User_Router = express.Router();
 User_Router.post('/signup', authController.signup);
 User_Router.post('/login', authController.login);
 
+User_Router.post('/forgotPassword', authController.forgotpassword);
+User_Router.patch('/resetPassowrd/:token', authController.resetPassowrd);
+
+
 // Rest like architecture......................
 User_Router.route('/')
       .get(authController.protect, UserController.get_all_users)
