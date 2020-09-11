@@ -7,10 +7,10 @@ const filterObj = (obj, ...allowedfields) => {
       const newObj = {};
       Object.keys(obj).forEach((el) => { // returns an array Object.keys............................
             if (allowedfields.includes(el)) {
-                  newObj[el] = obj[el];
+                  Object.assign(newObj, obj);
             }
       });
-      // console.log(newObj); 
+      console.log(newObj);
       return newObj;
 }
 
