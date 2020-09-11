@@ -18,6 +18,13 @@ exports.signup = async (req, res, next) => {
 	try {
 		const user = await User.create(req.body);
 		const token = await getToken(user._id);
+		const cookieOptions = {
+			expires: new Date(
+				Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+			),
+			httpOnly: true
+		};
+		res.cookie('jwt', token, cookieOptions);
 		res.status(404).json({
 			status: "Success",
 			U_token: token,
@@ -35,14 +42,18 @@ exports.login = async (req, res, next) => {
 		if (!email || !C_password) {
 			return next(new AppError('Please provide Email and Password!', 404));
 		}
-		const loginuser = await User.findOne({ email, Active: {$ne : false} }).select('+password');
+		const loginuser = await User.findOne({ email, Active: { $ne: false } }).select('+password');
 		// const correct = ; // return true or false
-
-
 		if (!loginuser || !await loginuser.correctPassword(C_password, loginuser.password)) {
 			return next(new AppError(`Incorrect email or password`, 401));
 		}
 		const token = await getToken(loginuser._id);
+		const cookieOptions = {
+			expire: 360000 + Date.now(),
+			httpOnly: true
+		};
+		console.log(cookieOptions);
+		res.cookie('jwt', token, cookieOptions);
 		res.status(200).json({
 			status: "Success",
 			U_token: token
@@ -64,26 +75,21 @@ exports.protect = async (req, res, next) => {
 		if (!verifyToken) {
 			return next(new AppError(`Logined Failed! Please try again to get access.`, 401));
 		}
-
 		// 2.) Verification Token .........................................
 		const decode = await verificationtoken(verifyToken, process.env.JWT_SECRET);
 		// console.log(decode);
-
 		// 3.) Check if user still exists................................
 		const CurrentUser = await User.findById(decode.id);           //finding single ID......
 		if (!CurrentUser) {
 			return next(new AppError(`User doesn't exists longer!`, 401));
 		}
-
 		// 4.) Check if user changed password after token created
 		if (CurrentUser.changePasswordAfter(decode.iat)) {
 			return next(new AppError(`User recently chnged password! Please login Again`, 401));
 		}
-
 		// Grant Access to Protected Route......................
 		req.user = CurrentUser;
 		next();
-
 	} catch (error) {
 		if (error.name === "JsonWebTokenError") {
 			return next(new AppError(`Invalid token, Please logined Again`, 401));

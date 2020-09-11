@@ -40,7 +40,8 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         required: true,
-        default: "user"
+        default: "user",
+        enum: ['admin', 'guide', "user"]
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -93,7 +94,6 @@ UserSchema.methods.createPasswordResetToken = function () {
 
 UserSchema.pre('save', function (next) {
     if (!this.isModified('password') || this.isNew) return next();
-
     this.passwordChangedAt = Date.now() - 1000;
     next();
 });

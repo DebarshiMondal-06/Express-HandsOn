@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(express.json());
+
 
 const Tour_Router = require('./Routes/Tour_Routes');
 const User_Router = require('./Routes/User_Routes');
-app.use(express.json());
+
 
 const AppError = require('./Classes/appError.js');
 const { errorfunction } = require('./Controllers/errorHandleController.js');
