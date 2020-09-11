@@ -1,24 +1,34 @@
 const express = require('express');
 const app = express();
+const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
-
-app.use(cookieParser());
-app.use(express.json());
-
-const Tour_Router = require('./Routes/Tour_Routes');
-const User_Router = require('./Routes/User_Routes');
-
 const AppError = require('./Classes/appError.js');
 const { errorfunction } = require('./Controllers/errorHandleController.js');
+
+// GLOBAL Middlewares for Express...................
+
+// 1) for HTTP header 
+app.use(helmet());
+
+// 2) for Cookie sending
+app.use(cookieParser());
+
+// 3) For Parsing data
+app.use(express.json());
+
 
 const limiter = rateLimit({
       max: 10,
       windowMs: 60 * 60 * 1000,
       message: 'Too many Request from this IP! Please try again in an hour!'
 });
+// For Rate limiting for APIs.
 app.use('/api', limiter);
 
+
+const Tour_Router = require('./Routes/Tour_Routes');
+const User_Router = require('./Routes/User_Routes');
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);
 app.use('/api/v1/users', User_Router);
@@ -39,9 +49,7 @@ app.all('*', (req, res, next) => {
       // console.log(req);
 });
 
-
 // Global errorhandle middleware........................
 app.use(errorfunction);
-
 
 module.exports = app;
