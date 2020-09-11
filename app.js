@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const AppError = require('./Classes/appError.js');
@@ -11,12 +14,22 @@ const { errorfunction } = require('./Controllers/errorHandleController.js');
 // 1) for HTTP header 
 app.use(helmet());
 
+
 // 2) for Cookie sending
 app.use(cookieParser());
 
-// 3) For Parsing data
+// 3) For Parsing data on req.body......................
 app.use(express.json());
 
+// Data Santization against NoSQL query injection..........
+app.use(mongoSanitize());
+
+
+// Data Santization for XSS(for html code)..........
+app.use(xss());
+
+// Prevent paramete pollution............
+app.use(hpp());
 
 const limiter = rateLimit({
       max: 10,
@@ -25,6 +38,7 @@ const limiter = rateLimit({
 });
 // For Rate limiting for APIs.
 app.use('/api', limiter);
+
 
 
 const Tour_Router = require('./Routes/Tour_Routes');

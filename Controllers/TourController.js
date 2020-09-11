@@ -12,7 +12,7 @@ exports.best_5_middleware = (req, res, next) => {
 };
 
 
-exports.get_all_tours = async (req, res) => {
+exports.get_all_tours = async (req, res, next) => {
     try {
 
         // 2) Advanced Filtering ........................
@@ -38,11 +38,8 @@ exports.get_all_tours = async (req, res) => {
             }
         });
     }
-    catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err
-        })
+    catch (error) {
+        return next(new AppError(`${error}`, 404));
     }
 }
 
