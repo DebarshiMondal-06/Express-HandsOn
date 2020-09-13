@@ -78,18 +78,15 @@ exports.create_tours = async (req, res) => {
 exports.get_tour = async (req, res, next) => {
     try {
         const single_tour = await Tour.findById(req.params.id);
-
         if (!single_tour) {
             return next(new AppError("Tour ID not found!", 404));
         }
-
         res.status(200).json({
             status: "success",
             data: {
                 result: single_tour
             }
         });
-
     } catch (error) {
         if (error.kind === "ObjectId") {
             return next(new AppError(`Invalid Id: ${error.value} doesn't exist!`, 404));

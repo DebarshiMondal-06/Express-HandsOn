@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const User = require('./User_models');
+// const User = require('./User_models');
 
 // Building a Tour Schema ***************************
 const TourSchema = new mongoose.Schema({
@@ -93,7 +93,12 @@ const TourSchema = new mongoose.Schema({
             day: Number
         }
     ],
-    guides: Array
+    guides: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    ]
 });
 // Document Middleware..........for .save() and .Create()...........................
 TourSchema.pre('save', function (next) { // 'save-pre hooks always run before exectution and method save is for post query...........'
@@ -116,6 +121,7 @@ TourSchema.pre(/^find/, function (next) {  // 'pre' always run before a query ex
     this.start = new Date();
     next();
 });
+
 TourSchema.post(/^find/, function (docs, next) { // 'post' always run after a query exeecute.............
     console.log(`the time taken to execute query is ${Date.now() - this.start} milliseconds`);
     next();
@@ -131,22 +137,31 @@ TourSchema.pre('aggregate', function (next) {
     next();
 });
 
-//Adding Guides(user) into Tours.............
-TourSchema.pre('save', async function (next) {
-    const guidesPromise = this.guides.map(async (id) => {
-        return await User.findById(id);  //return array of promises.......................
+
+// Advanced Mongoose modelling.................. 
+
+// //Adding Guides(user) into Tours Embedding.............
+// TourSchema.pre('save', async function (next) {
+//     const guidesPromise = this.guides.map(async (id) => {
+//         return await User.findById(id);  //return array of promises.......................
+//     });
+//     // console.log(await Promise.all(guidesPromise));
+//     this.guides = await Promise.all(guidesPromise); // combines all array of promise all at same time...............
+//     // this.guides = guidesPromise;
+//     next();
+// });
+
+
+TourSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'guides',
+        select: '-__v'
     });
-    // console.log(await Promise.all(guidesPromise));
-    this.guides = await Promise.all(guidesPromise); // combines all array of promise all at same time...............
-    // this.guides = guidesPromise;
     next();
 });
 
 
 const Tour = mongoose.model('Tour', TourSchema);
 // Ends here Schema **************************
-
-
-
 
 module.exports = Tour;
