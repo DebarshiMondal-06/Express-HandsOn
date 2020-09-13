@@ -43,9 +43,11 @@ app.use('/api', limiter);
 
 const Tour_Router = require('./Routes/Tour_Routes');
 const User_Router = require('./Routes/User_Routes');
+const Review_Router = require('./Routes/Review_Routes');
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);
 app.use('/api/v1/users', User_Router);
+app.use('/api/v1/review', Review_Router);
 
 // Error for no correct URL...................................
 app.all('*', (req, res, next) => {
