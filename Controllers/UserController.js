@@ -1,5 +1,6 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
+const factoryDelete = require('../Controllers/handlerFunction');
 
 // Filtering Req. Key name....................
 const filterObj = (obj, ...allowedfields) => {
@@ -44,17 +45,7 @@ exports.updateMe = async (req, res, next) => {
       }
 }
 
-exports.deleteMe = async (req, res, next) => {
-      if (req.user.role == 'admin') {
-            return next(new AppError(`User can be deactivated! as User is Admin!`, 500));
-      }
-      await User.findByIdAndUpdate(req.user._id, { Active: false });
-      res.status(204).json({
-            status: "Success",
-            message: null
-      });
-}
-
+exports.deleteMe = factoryDelete.deleteOne(User);
 
 exports.create_user = (req, res) => {
       res.status(500).json({

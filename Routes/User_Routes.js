@@ -12,7 +12,7 @@ User_Router.post('/forgotPassword', authController.forgotpassword);
 User_Router.patch('/resetPassword/:token', authController.resetPassowrd);
 
 User_Router.put('/updateMe', authController.protect, UserController.updateMe);
-User_Router.delete('/deleteMe', authController.protect, UserController.deleteMe);
+// User_Router.delete('/deleteMe', authController.protect, UserController.deleteMe);
 
 
 // Rest like architecture......................
@@ -22,7 +22,7 @@ User_Router.route('/')
 
 User_Router.route('/:id')
       .get(UserController.get_user)
-      .delete(UserController.delete_user)
+      .delete(UserController.deleteMe)
       .patch(UserController.update_user);
 
 
