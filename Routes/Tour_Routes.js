@@ -12,7 +12,7 @@ Tour_Router.route('/monthly-plan/:year').get(get_monthly_plan);
 
 
 Tour_Router.route('/')
-      .get(authController.protect, authController.restrict('admin'), get_all_tours)
+      .get(get_all_tours)
       .post(create_tours);
 
 Tour_Router.route('/:id')

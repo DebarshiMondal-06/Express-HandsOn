@@ -1,5 +1,4 @@
 const Tour = require('../models/Tour_models');
-const { stat } = require('fs');
 const AppError = require('../Classes/appError');
 const APIFeatures = require('../Classes/ClassAPIFeatures');
 
@@ -77,7 +76,7 @@ exports.create_tours = async (req, res) => {
 
 exports.get_tour = async (req, res, next) => {
     try {
-        const single_tour = await Tour.findById(req.params.id);
+        const single_tour = await Tour.findById(req.params.id).populate('reviews');
         if (!single_tour) {
             return next(new AppError("Tour ID not found!", 404));
         }

@@ -100,6 +100,8 @@ const TourSchema = new mongoose.Schema({
         }
     ]
 });
+
+
 // Document Middleware..........for .save() and .Create()...........................
 TourSchema.pre('save', function (next) { // 'save-pre hooks always run before exectution and method save is for post query...........'
     this.slug = slugify(this.name, {
@@ -160,6 +162,15 @@ TourSchema.pre(/^find/, function (next) {
     next();
 });
 
+// Virtual Populate........................
+TourSchema.virtual('reviews', {
+    ref: 'Review',
+    foreignField: 'forTour',
+    localField: '_id'
+});
+
+TourSchema.set('toObject', { virtuals: true });
+TourSchema.set('toJSON', { virtuals: true });
 
 const Tour = mongoose.model('Tour', TourSchema);
 // Ends here Schema **************************
