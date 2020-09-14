@@ -11,18 +11,14 @@ const reviewSchema = new mongoose.Schema({
         min: 1,
         max: 5
     },
-    forTour: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Tour'
-        }
-    ],
-    whichUser: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: 'User'
-        }
-    ],
+    forTour: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Tour'
+    },
+    whichUser: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
     createdAt: {
         type: Date,
         default: Date.now()

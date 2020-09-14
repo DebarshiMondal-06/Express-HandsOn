@@ -3,6 +3,9 @@ const AppError = require('../Classes/appError');
 
 exports.create_review = async (req, res, next) => {
     try {
+        if (!req.body.forTour) req.body.forTour = req.params.tourId;
+        if (!req.body.whichUser) req.body.whichUser = req.user.id;
+        
         const createNew = await Review.create(req.body);
         res.status(200).json({
             status: 'Success',
