@@ -1,7 +1,7 @@
 const Tour = require('../models/Tour_models');
 const AppError = require('../Classes/appError');
 const APIFeatures = require('../Classes/ClassAPIFeatures');
-
+const factoryDelete = require('../Controllers/handlerFunction');
 
 exports.best_5_middleware = (req, res, next) => {
     req.query.limit = '5';
@@ -118,27 +118,7 @@ exports.update_tour = async (req, res, next) => {
 }
 
 
-
-exports.delete_a_tour = async (req, res, next) => {
-    try {
-        const tour_delete = await Tour.findByIdAndDelete(req.params.id);
-        if (!tour_delete) {
-            return next(new AppError("Tour ID not found!", 404));
-        }
-        res.status(200).json({
-            status: "deleted",
-            message: "No Content"
-        });
-    } catch (error) {
-        if (error.kind === "ObjectId") {
-            res.status(400).json({
-                status: 'Fail',
-                message: `Invalid Id: ${error.value}`
-            });
-        }
-    }
-}
-
+exports.delete_a_tour = factoryDelete.deleteOne(Tour);
 
 
 exports.get_tour_stats = async (req, res) => {

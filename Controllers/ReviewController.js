@@ -1,5 +1,6 @@
 const Review = require('../models/Review_model');
 const AppError = require('../Classes/appError');
+const factoryDelete = require('../Controllers/handlerFunction');
 
 exports.create_review = async (req, res, next) => {
     try {
@@ -29,3 +30,5 @@ exports.get_all_review = async (req, res, next) => {
         return next(new AppError(`${error}`, 500));
     }
 }
+
+exports.deleteReview = factoryDelete.deleteOne(Review);
