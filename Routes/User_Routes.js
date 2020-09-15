@@ -6,20 +6,18 @@ const User_Router = express.Router();
 
 User_Router.post('/signup', authController.signup);
 User_Router.post('/login', authController.login);
-
-
 User_Router.post('/forgotPassword', authController.forgotpassword);
 User_Router.patch('/resetPassword/:token', authController.resetPassowrd);
-User_Router.put('/updateMe', authController.protect, UserController.updateMe);
-User_Router.get('/me', authController.protect, UserController.get_me, UserController.get_user);
-// User_Router.delete('/deleteMe', authController.protect, UserController.deleteMe);
 
 
-// Rest like architecture......................
+User_Router.use(authController.protect); //Auth Controller..........after this
+User_Router.put('/me', UserController.updateMe);
+User_Router.get('/me', UserController.get_me, UserController.get_user);
+
+
+User_Router.use(authController.restrict('admin'))
 User_Router.route('/')
-      .get(authController.protect, authController.restrict('admin'), UserController.get_all_users);
-      //Mounting Routes.....................
-
+      .get(UserController.get_all_users);
 User_Router.route('/:id')
       .get(UserController.get_user)
       .delete(UserController.deleteUser)
