@@ -12,7 +12,7 @@ ReviewRouter
 ReviewRouter
     .route('/:id')
     .get(reviewController.getOne_review)
-    .delete (reviewController.deleteReview)
+    .delete(reviewController.deleteReview)
     .put(reviewController.update_review);
 
 module.exports = ReviewRouter;

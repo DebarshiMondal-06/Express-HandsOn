@@ -11,6 +11,9 @@ exports.tourReview = (req, res, next) => {
 }
 
 exports.create_review = factory.createOne(Review);
+exports.getOne_review = factory.getOne(Review);
+exports.update_review = factory.updateOne(Review);
+exports.deleteReview = factory.deleteOne(Review);
 
 exports.get_all_review = async (req, res, next) => {
     try {
@@ -25,8 +28,3 @@ exports.get_all_review = async (req, res, next) => {
         return next(new AppError(`${error}`, 500));
     }
 }
-
-
-exports.getOne_review = factory.getOne(Review);
-exports.update_review = factory.updateOne(Review);
-exports.deleteReview = factory.deleteOne(Review);
