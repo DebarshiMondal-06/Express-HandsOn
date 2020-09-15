@@ -7,10 +7,11 @@ const ReviewRouter = express.Router({ mergeParams: true });
 ReviewRouter
     .route('/')
     .get(reviewController.get_all_review)
-    .post(authController.protect, reviewController.create_review);
+    .post(authController.protect, reviewController.tourReview, reviewController.create_review);
 
 ReviewRouter
     .route('/:id')
-    .delete(reviewController.deleteReview);
+    .delete(reviewController.deleteReview)
+    .put(reviewController.update_review);
 
 module.exports = ReviewRouter;

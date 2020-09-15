@@ -1,21 +1,16 @@
 const Review = require('../models/Review_model');
 const AppError = require('../Classes/appError');
-const factoryDelete = require('../Controllers/handlerFunction');
+const factory = require('../Controllers/handlerFunction');
 
-exports.create_review = async (req, res, next) => {
-    try {
-        if (!req.body.forTour) req.body.forTour = req.params.tourId;
-        if (!req.body.whichUser) req.body.whichUser = req.user.id;
-
-        const createNew = await Review.create(req.body);
-        res.status(200).json({
-            status: 'Success',
-            result: createNew
-        });
-    } catch (error) {
-        return next(new AppError(`${error}`, 500));
-    }
+// if (!req.body.forTour) req.body.forTour = req.params.tourId;
+// if (!req.body.whichUser) req.body.whichUser = req.user.id;
+exports.tourReview = (req, res, next) => {
+    if (!req.body.forTour) req.body.forTour = req.params.tourId;
+    if (!req.body.whichUser) req.body.whichUser = req.user.id;
+    next();
 }
+
+exports.create_review = factory.createOne(Review);
 
 exports.get_all_review = async (req, res, next) => {
     try {
@@ -31,4 +26,6 @@ exports.get_all_review = async (req, res, next) => {
     }
 }
 
-exports.deleteReview = factoryDelete.deleteOne(Review);
+exports.update_review = factory.updateOne(Review);
+
+exports.deleteReview = factory.deleteOne(Review);

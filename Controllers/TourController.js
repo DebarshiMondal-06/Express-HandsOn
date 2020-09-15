@@ -1,7 +1,7 @@
 const Tour = require('../models/Tour_models');
 const AppError = require('../Classes/appError');
 const APIFeatures = require('../Classes/ClassAPIFeatures');
-const factoryDelete = require('../Controllers/handlerFunction');
+const factory = require('../Controllers/handlerFunction');
 
 exports.best_5_middleware = (req, res, next) => {
     req.query.limit = '5';
@@ -42,37 +42,6 @@ exports.get_all_tours = async (req, res, next) => {
     }
 }
 
-exports.create_tours = async (req, res) => {
-    try {
-        const new_Tour = await Tour.create(req.body);
-        res.status(200).json({
-            status: 'Success...',
-            data: {
-                tour: new_Tour
-            }
-        });
-    } catch (error) {
-        if (error.code === 11000) {
-            res.status(400).json({
-                status: 'Fail',
-                value: error.keyValue.name,
-                message: "Duplicate entry"
-            });
-        }
-        if (error.errors) {
-            res.status(400).json({
-                status: 'Validation Error',
-                message: Object.values(error.errors).map((el) => (el.message)).join(" , "),
-            });
-        }
-        else {
-            res.status(400).json({
-                status: 'Fail',
-                error: error
-            });
-        }
-    }
-}
 
 exports.get_tour = async (req, res, next) => {
     try {
@@ -93,32 +62,9 @@ exports.get_tour = async (req, res, next) => {
     }
 }
 
-exports.update_tour = async (req, res, next) => {
-    try {
-        const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-            new: true
-        });
-        if (!update) {
-            return next(new AppError("Tour ID not found!", 404));
-        }
-        res.status(200).json({
-            status: "Updated",
-            data: {
-                result: update
-            }
-        });
-    } catch (error) {
-        if (error.kind === "ObjectId") {
-            res.status(400).json({
-                status: 'Fail',
-                message: `Invalid Id: ${error.value}`
-            });
-        }
-    }
-}
-
-
-exports.delete_a_tour = factoryDelete.deleteOne(Tour);
+exports.create_tours = factory.createOne(Tour);
+exports.update_tour = factory.updateOne(Tour);
+exports.delete_a_tour = factory.deleteOne(Tour);
 
 
 exports.get_tour_stats = async (req, res) => {

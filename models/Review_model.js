@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const reviewSchema = new mongoose.Schema({
     review: {
         type: String,
-        required: ['true', 'Message cannot be blank!'],
+        required: [true, 'Review cannot be blank!'],
         maxlength: 255
     },
     rating: {
@@ -13,7 +13,8 @@ const reviewSchema = new mongoose.Schema({
     },
     forTour: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Tour'
+        ref: 'Tour',
+        required: [true, 'Review must be from a specefic Tour']
     },
     whichUser: {
         type: mongoose.Schema.ObjectId,

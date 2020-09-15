@@ -1,6 +1,6 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
-const factoryDelete = require('../Controllers/handlerFunction');
+const factory = require('../Controllers/handlerFunction');
 
 // Filtering Req. Key name....................
 const filterObj = (obj, ...allowedfields) => {
@@ -45,8 +45,6 @@ exports.updateMe = async (req, res, next) => {
       }
 }
 
-exports.deleteMe = factoryDelete.deleteOne(User);
-
 exports.create_user = (req, res) => {
       res.status(500).json({
             status: 'error',
@@ -60,16 +58,7 @@ exports.get_user = (req, res) => {
 
       });
 }
-exports.delete_user = (req, res) => {
-      res.status(500).json({
-            status: 'error',
-            message: "Server error not reachabele"
 
-      });
-}
-exports.update_user = (req, res) => {
-      res.status(500).json({
-            status: 'error',
-            message: "Server error not reachabele"
-      });
-}
+exports.update_user = factory.updateOne(User);
+
+exports.deleteMe = factory.deleteOne(User);
