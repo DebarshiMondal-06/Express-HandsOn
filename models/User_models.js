@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcryptjs = require('bcryptjs');
 const crypto = require('crypto');
-const { log } = require('console');
 
 const UserSchema = new mongoose.Schema({
 
@@ -98,10 +97,10 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
-UserSchema.pre(/^find/, function (next) {
-    this.find({ Active: { $ne: false } });
-    next();
-});
+// UserSchema.pre(/^find/, function (next) {
+//     this.find({ Active: { $ne: false } });
+//     next();
+// });
 
 
 

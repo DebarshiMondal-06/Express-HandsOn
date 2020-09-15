@@ -14,7 +14,6 @@ const filterObj = (obj, ...allowedfields) => {
       console.log(newObj);
       return newObj;
 }
-
 exports.updateMe = async (req, res, next) => {
       try {
             const { email, name } = req.body;
@@ -34,6 +33,13 @@ exports.updateMe = async (req, res, next) => {
             return next(new AppError(`${error}`, 401));
       }
 }
+
+exports.get_me = (req, res, next) => {
+      req.params.id = req.user.id;
+      next();
+};
+
+
 
 exports.get_all_users = factory.getall(User);
 exports.get_user = factory.getOne(User);

@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
 			expire: 360000 + Date.now(),
 			httpOnly: true
 		};
-		console.log(cookieOptions);
+		// console.log(cookieOptions);
 		res.cookie('jwt', token, cookieOptions);
 		res.status(200).json({
 			status: "Success",
