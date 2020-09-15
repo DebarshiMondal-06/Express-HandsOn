@@ -15,16 +15,6 @@ const filterObj = (obj, ...allowedfields) => {
       return newObj;
 }
 
-exports.get_all_users = async (req, res) => {
-      const getAllUser = await User.find();
-
-      res.status(200).json({
-            status: 'success',
-            size: getAllUser.length,
-            result: getAllUser
-      });
-}
-
 exports.updateMe = async (req, res, next) => {
       try {
             const { email, name } = req.body;
@@ -45,20 +35,7 @@ exports.updateMe = async (req, res, next) => {
       }
 }
 
-exports.create_user = (req, res) => {
-      res.status(500).json({
-            status: 'error',
-            message: "Server error not reachabele"
-      });
-}
-exports.get_user = (req, res) => {
-      res.status(500).json({
-            status: 'error',
-            message: "Server error not reachabele"
-
-      });
-}
-
+exports.get_all_users = factory.getall(User);
+exports.get_user = factory.getOne(User);
 exports.update_user = factory.updateOne(User);
-
-exports.deleteMe = factory.deleteOne(User);
+exports.deleteUser = factory.deleteOne(User);

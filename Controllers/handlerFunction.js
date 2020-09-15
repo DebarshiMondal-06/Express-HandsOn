@@ -1,4 +1,5 @@
 const AppError = require('../Classes/appError');
+const APIFeatures = require('../Classes/ClassAPIFeatures');
 
 
 exports.createOne = (Model) => {
@@ -34,8 +35,6 @@ exports.createOne = (Model) => {
         }
     }
 }
-
-
 
 exports.deleteOne = (Model) => {
     return async (req, res, next) => {
@@ -81,6 +80,55 @@ exports.updateOne = (Model) => {
                     message: `Invalid Id: ${error.value}`
                 });
             }
+        }
+    }
+}
+
+exports.getOne = (Model, options) => {
+    return async (req, res, next) => {
+        try {
+            let query = Model.findById(req.params.id);
+            if (options) query = query.populate(options);
+            const finalquery = await query;
+            if (!finalquery) {
+                return next(new AppError("Tour ID not found!", 404));
+            }
+            res.status(200).json({
+                status: "success",
+                data: {
+                    result: finalquery
+                }
+            });
+        } catch (error) {
+            if (error.kind === "ObjectId") {
+                return next(new AppError(`Invalid Id: ${error.value} doesn't exist!`, 404));
+            }
+        }
+    }
+}
+
+exports.getall = (Model) => {
+    return async (req, res, next) => {
+        try {
+            const features = new APIFeatures(Model, req.query)
+                .filter()
+                .sort()
+                .limitFields()
+                .limits();
+
+            // Executing Query ..............................
+            const all_tour = await features.queryy;
+
+            res.status(200).json({
+                status: 'success',
+                size: all_tour.length,
+                data: {
+                    result: all_tour
+                }
+            });
+        }
+        catch (error) {
+            return next(new AppError(`${error}`, 404));
         }
     }
 }

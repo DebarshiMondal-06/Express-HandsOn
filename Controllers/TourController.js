@@ -1,6 +1,6 @@
 const Tour = require('../models/Tour_models');
 const AppError = require('../Classes/appError');
-const APIFeatures = require('../Classes/ClassAPIFeatures');
+// const APIFeatures = require('../Classes/ClassAPIFeatures');
 const factory = require('../Controllers/handlerFunction');
 
 exports.best_5_middleware = (req, res, next) => {
@@ -11,57 +11,8 @@ exports.best_5_middleware = (req, res, next) => {
 };
 
 
-exports.get_all_tours = async (req, res, next) => {
-    try {
-
-        // 2) Advanced Filtering ........................
-        // let queryStr = JSON.stringify(queryObj);
-        // queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (matc) => `$${matc}`);
-        // // b for exact value and g for multiple replace value............
-        // // replace first param replacer and second param replace value....
-
-        const features = new APIFeatures(Tour, req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .limits();
-
-        // Executing Query ..............................
-        const all_tour = await features.queryy;
-
-        res.status(200).json({
-            status: 'success',
-            size: all_tour.length,
-            data: {
-                result: all_tour
-            }
-        });
-    }
-    catch (error) {
-        return next(new AppError(`${error}`, 404));
-    }
-}
-
-
-exports.get_tour = async (req, res, next) => {
-    try {
-        const single_tour = await Tour.findById(req.params.id).populate('reviews');
-        if (!single_tour) {
-            return next(new AppError("Tour ID not found!", 404));
-        }
-        res.status(200).json({
-            status: "success",
-            data: {
-                result: single_tour
-            }
-        });
-    } catch (error) {
-        if (error.kind === "ObjectId") {
-            return next(new AppError(`Invalid Id: ${error.value} doesn't exist!`, 404));
-        }
-    }
-}
-
+exports.get_all_tours = factory.getall(Tour);
+exports.get_tour = factory.getOne(Tour, { path: 'reviews' });
 exports.create_tours = factory.createOne(Tour);
 exports.update_tour = factory.updateOne(Tour);
 exports.delete_a_tour = factory.deleteOne(Tour);

@@ -26,6 +26,7 @@ exports.get_all_review = async (req, res, next) => {
     }
 }
 
-exports.update_review = factory.updateOne(Review);
 
+exports.getOne_review = factory.getOne(Review);
+exports.update_review = factory.updateOne(Review);
 exports.deleteReview = factory.deleteOne(Review);
