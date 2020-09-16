@@ -129,7 +129,7 @@ TourSchema.post(/^find/, function (docs, next) { // 'post' always run after a qu
     next();
 });
 
-// Aggregrate Middleware................ for .aggreate middleware ..............................
+// Aggregrate Middleware................ for .aggreate function defined ..............................
 TourSchema.pre('aggregate', function (next) {
     this.pipeline().unshift({
         $match: {
