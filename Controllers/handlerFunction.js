@@ -110,7 +110,9 @@ exports.getOne = (Model, options) => {
 exports.getall = (Model) => {
     return async (req, res, next) => {
         try {
-            const features = new APIFeatures(Model, req.query)
+            let filter = {};
+            if (req.params.tourId) filter = { forTour: req.params.tourId };
+            const features = new APIFeatures(Model.find(filter), req.query)
                 .filter()
                 .sort()
                 .limitFields()

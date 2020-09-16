@@ -15,16 +15,4 @@ exports.getOne_review = factory.getOne(Review);
 exports.update_review = factory.updateOne(Review);
 exports.deleteReview = factory.deleteOne(Review);
 
-exports.get_all_review = async (req, res, next) => {
-    try {
-        let filter = {};
-        if (req.params.tourId) filter = { forTour: req.params.tourId };
-        const createNew = await Review.find(filter);
-        res.status(200).json({
-            status: 'Success',
-            result: createNew
-        });
-    } catch (error) {
-        return next(new AppError(`${error}`, 500));
-    }
-}
+exports.get_all_review = factory.getall(Review);
