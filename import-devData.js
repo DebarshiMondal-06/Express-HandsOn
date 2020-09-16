@@ -3,6 +3,9 @@ dotenv.config({ path: './config.env' });
 const mongoose = require('mongoose');
 const fs = require('fs');
 const Tour = require('./models/Tour_models');
+const Review = require('./models/Review_model');
+const User = require('./models/User_models');
+// const { deleteMany } = require('./models/Tour_models');
 
 const DB = process.env.DATABASE.replace('<password>', process.env.DB_PASSWORD);
 mongoose.connect(DB, {
@@ -15,12 +18,16 @@ mongoose.connect(DB, {
       .catch(() => console.log("Error Connecting"));
 
 
-const fileData = JSON.parse(fs.readFileSync('./dev-data/data/tours.json'));
+const fileTData = JSON.parse(fs.readFileSync('./dev-data/data/tours.json'));
+const fileRData = JSON.parse(fs.readFileSync('./dev-data/data/reviews.json'));
+const fileUData = JSON.parse(fs.readFileSync('./dev-data/data/users.json'));
 
 
 const importData = async () => {
       try {
-            await Tour.create(fileData);
+            await Tour.create(fileTData);
+            await Review.create(fileRData);
+            await User.create(fileUData, { validateBeforeSave: false });
             console.log("Succesfully Imported!");
       } catch (error) {
             console.log(error);
@@ -29,6 +36,8 @@ const importData = async () => {
 
 const deleteData = async () => {
       try {
+            await User.deleteMany();
+            await Review.deleteMany();
             await Tour.deleteMany();
             console.log("Succesfully Deleted!");
       } catch (error) {
@@ -37,3 +46,4 @@ const deleteData = async () => {
 }
 
 importData();
+// deleteData();
