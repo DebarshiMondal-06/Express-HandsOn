@@ -9,11 +9,17 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const AppError = require('./Classes/appError.js');
 const { errorfunction } = require('./Controllers/errorHandleController.js');
+// Routes................................
+const View_Router = require('./Routes/View_Routes');
+const Tour_Router = require('./Routes/Tour_Routes');
+const User_Router = require('./Routes/User_Routes');
+const Review_Router = require('./Routes/Review_Routes');
+
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 // GLOBAL Middlewares for Express...................
 
@@ -46,18 +52,14 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 
-
-app.get('/', (req, res) => {
-      res.status(200).render('base');
-});
-
-const Tour_Router = require('./Routes/Tour_Routes');
-const User_Router = require('./Routes/User_Routes');
-const Review_Router = require('./Routes/Review_Routes');
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);
 app.use('/api/v1/users', User_Router);
 app.use('/api/v1/review', Review_Router);
+app.use('/', View_Router);
+
+
+
 
 // Error for no correct URL...................................
 app.all('*', (req, res, next) => {
