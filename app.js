@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 const helmet = require('helmet');
@@ -8,6 +9,11 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const AppError = require('./Classes/appError.js');
 const { errorfunction } = require('./Controllers/errorHandleController.js');
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+
 
 // GLOBAL Middlewares for Express...................
 
@@ -40,6 +46,10 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 
+
+app.get('/', (req, res) => {
+      res.status(200).render('base');
+});
 
 const Tour_Router = require('./Routes/Tour_Routes');
 const User_Router = require('./Routes/User_Routes');

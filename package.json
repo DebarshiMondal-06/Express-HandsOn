@@ -22,6 +22,7 @@
     "mongoose": "^5.10.5",
     "nodemailer": "^6.4.11",
     "nodemon": "^2.0.4",
+    "pug": "^3.0.0",
     "slugify": "^1.4.5",
     "util": "^0.12.3",
     "validator": "^13.1.1",
