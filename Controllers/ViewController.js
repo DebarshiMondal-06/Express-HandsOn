@@ -13,8 +13,17 @@ exports.getOverview = async (req, res, next) => {
     }
 }
 
-exports.getTours = (req, res) => {
-    res.status(200).render('tour', {
-        title: 'The Himalyan'
-    });
+exports.getTours = async (req, res) => {
+    try {
+        const gettour = await Tour.findOne({ slug: req.params.id }).populate({
+            path: 'reviews',
+            fields: 'review rating whichUser'
+        });
+        res.status(200).render('tour', {
+            title: 'The Himalyan',
+            result: gettour
+        });
+    } catch (error) {
+        return next(new AppError(`${error}`));
+    }
 }

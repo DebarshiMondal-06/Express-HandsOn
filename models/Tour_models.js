@@ -140,20 +140,6 @@ TourSchema.pre('aggregate', function (next) {
 });
 
 
-// Advanced Mongoose modelling.................. 
-
-// //Adding Guides(user) into Tours Embedding.............
-// TourSchema.pre('save', async function (next) {
-//     const guidesPromise = this.guides.map(async (id) => {
-//         return await User.findById(id);  //return array of promises.......................
-//     });
-//     // console.log(await Promise.all(guidesPromise));
-//     this.guides = await Promise.all(guidesPromise); // combines all array of promise all at same time...............
-//     // this.guides = guidesPromise;
-//     next();
-// });
-
-
 TourSchema.pre(/^find/, function (next) {
     this.populate({
         path: 'guides',
