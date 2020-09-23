@@ -21,7 +21,7 @@ exports.getTours = async (req, res) => {
         });
         res.status(200).render('tour', {
             title: 'The Himalyan',
-            result: gettour
+            results: gettour
         });
     } catch (error) {
         return next(new AppError(`${error}`));

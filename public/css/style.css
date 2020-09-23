@@ -524,7 +524,7 @@ body {
 .picture-box__img {
   display: block;
   width: 100%;
-  height: 110%;
+  height: 100vh;
   -o-object-fit: cover;
   object-fit: cover;
 }
