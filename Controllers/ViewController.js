@@ -13,7 +13,7 @@ exports.getOverview = async (req, res, next) => {
     }
 }
 
-exports.getTours = async (req, res) => {
+exports.getTours = async (req, res, next) => {
     try {
         const gettour = await Tour.findOne({ slug: req.params.id }).populate({
             path: 'reviews',
@@ -29,6 +29,17 @@ exports.getTours = async (req, res) => {
                 title: `${gettour.name} Tour`,
                 results: gettour
             });
+    } catch (error) {
+        return next(new AppError(`${error}`));
+    }
+}
+
+
+exports.loginpage = async (req, res, next) => {
+    try {
+        res.status(200).render('login', {
+            title: 'Login'
+        })
     } catch (error) {
         return next(new AppError(`${error}`));
     }
