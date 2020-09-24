@@ -29,10 +29,7 @@ locations.forEach(loc => {
     // Add popup
     new mapboxgl.Popup({
         offset: 30
-    })
-        .setLngLat(loc.coordinates)
-        .setHTML(`<p> Day ${loc.day}: ${loc.description} </p>`)
-        .addTo(map);
+    }).setLngLat(loc.coordinates).setHTML(`<p> Day ${loc.day}: ${loc.description} </p>`).addTo(map);
 
     // Extends map bounds to include current location.......
     bounds.extend(loc.coordinates);
