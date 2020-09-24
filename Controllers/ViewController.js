@@ -20,7 +20,7 @@ exports.getTours = async (req, res) => {
             fields: 'review rating whichUser'
         });
         res.status(200).render('tour', {
-            title: 'The Himalyan',
+            title: `${gettour.name} Tour`,
             results: gettour
         });
     } catch (error) {
