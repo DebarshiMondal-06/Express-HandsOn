@@ -1,96 +1,107 @@
-extends base
+html(lang="en")
+    head
+        title Natours | #{title}
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" , href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+        link(rel="stylesheet" href="/css/style.css")   
+        link(rel="shortcut icon", type="image/png", href="/img/favicon.png")
+        link(rel="stylesheet" , href="https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css")
+        script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+    body
+        include _header
 
-block append head
-    script(src='/js/mapbox.js')
+        mixin overviewBoxes(label, text, icon)
+            .overview-box__detail
+                svg.overview-box__icon
+                    use(xlink:href=`/img/icons.svg#icon-${icon}`)
+                span.overview-box__label=label
+                span.overview-box__text=text
 
-mixin overviewBoxes(label, text, icon)
-    .overview-box__detail
-        svg.overview-box__icon
-            use(xlink:href=`/img/icons.svg#icon-${icon}`)
-        span.overview-box__label=label
-        span.overview-box__text=text
+        mixin reviewCard(review)
+            .reviews__card
+                .reviews__avatar
+                    img.reviews__avatar-img(src='/img/users/user-7.jpg', alt='Jim Brown')
+                    h6.reviews__user=review.whichUser.name
+                p.reviews__text=review.review
+                .reviews__rating
+                    each star in [1,2,3,4,5]
+                        svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+                            use(xlink:href='/img/icons.svg#icon-star')
 
-mixin reviewCard(review)
-    .reviews__card
-        .reviews__avatar
-            img.reviews__avatar-img(src='/img/users/user-7.jpg', alt='Jim Brown')
-            h6.reviews__user=review.whichUser.name
-        p.reviews__text=review.review
-        .reviews__rating
-            each star in [1,2,3,4,5]
-                svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
-                    use(xlink:href='/img/icons.svg#icon-star')
-    
 
-block content
-    section.section-header
-        .header__hero
-            .header__hero-overlay &nbsp;
-            img.header__hero-img(src=`/img/tours/${results.imageCover}`, alt=`${results.name}`)
+        section.section-header
+            .header__hero
+                .header__hero-overlay &nbsp;
+                img.header__hero-img(src=`/img/tours/${results.imageCover}`, alt=`${results.name}`)
 
-        .heading-box
-            h1.heading-primary
-                span=results.name
-            .heading-box__group
-                .heading-box__detail
-                    svg.heading-box__icon
-                        use(xlink:href='/img/icons.svg#icon-clock')
-                    span.heading-box__text=`${results.duration} days`
-                .heading-box__detail
-                    svg.heading-box__icon
-                        use(xlink:href='/img/icons.svg#icon-map-pin')
-                    span.heading-box__text=results.startLocation.description
+            .heading-box
+                h1.heading-primary
+                    span=results.name
+                .heading-box__group
+                    .heading-box__detail
+                        svg.heading-box__icon
+                            use(xlink:href='/img/icons.svg#icon-clock')
+                        span.heading-box__text=`${results.duration} days`
+                    .heading-box__detail
+                        svg.heading-box__icon
+                            use(xlink:href='/img/icons.svg#icon-map-pin')
+                        span.heading-box__text=results.startLocation.description
 
-    section.section-description
-        .overview-box
-            div
-                .overview-box__group
-                    h2.heading-secondary.ma-bt-lg Quick facts
-                    - const date = results.startDates[0].toLocaleString('en-in', {day: 'numeric', month: 'long', year: 'numeric'})
-                    +overviewBoxes('Next date', date , 'calendar')
-                    +overviewBoxes('Diffficulty', results.difficulty , 'trending-up')
-                    +overviewBoxes('Participants', `${results.maxGroupSize} peoples` , 'user')
-                    +overviewBoxes('Rating', `${results.ratingAverage} / 5` , 'star')
-
+        section.section-description
+            .overview-box
+                div
                     .overview-box__group
-                        h2.heading-secondary.ma-bt-lg Your tour guides
+                        h2.heading-secondary.ma-bt-lg Quick facts
+                        - const date = results.startDates[0].toLocaleString('en-in', {day: 'numeric', month: 'long', year: 'numeric'})
+                        +overviewBoxes('Next date', date , 'calendar')
+                        +overviewBoxes('Diffficulty', results.difficulty , 'trending-up')
+                        +overviewBoxes('Participants', `${results.maxGroupSize} peoples` , 'user')
+                        +overviewBoxes('Rating', `${results.ratingAverage} / 5` , 'star')
 
-                    each guide in results.guides
-                        .overview-box__detail
-                            img.overview-box__img(src=`/img/users/user-2.jpg`, alt=`${guide.name}`)
-                            - if(guide.role === 'lead-guide')
-                                span.overview-box__label Lead guide
-                            - if(guide.role === 'guide')
-                                span.overview-box__label Tour guide
-                            span.overview-box__text=guide.name
+                        .overview-box__group
+                            h2.heading-secondary.ma-bt-lg Your tour guides
+
+                        each guide in results.guides
+                            .overview-box__detail
+                                img.overview-box__img(src=`/img/users/user-2.jpg`, alt=`${guide.name}`)
+                                - if(guide.role === 'lead-guide')
+                                    span.overview-box__label Lead guide
+                                - if(guide.role === 'guide')
+                                    span.overview-box__label Tour guide
+                                span.overview-box__text=guide.name
 
 
-        .description-box
-            h2.heading-secondary.ma-bt-lg=`About the ${results.name}`
-            - const paragraphs = results.description.split('\n');
-            each p in paragraphs
-                p.description__text=p
+            .description-box
+                h2.heading-secondary.ma-bt-lg=`About the ${results.name}`
+                - const paragraphs = results.description.split('\n');
+                each p in paragraphs
+                    p.description__text=p
 
-    section.section-pictures
-        each img, i in results.images
-            .picture-box
-                img.picture-box__img(class=`picture-box__img--${i + 1}`, src=`/img/tours/${img}`, alt=`The Park Camper Tour ${i}`)
+        section.section-pictures
+            each img, i in results.images
+                .picture-box
+                    img.picture-box__img(class=`picture-box__img--${i + 1}`, src=`/img/tours/${img}`, alt=`The Park Camper Tour ${i}`)
 
-    section.section-map
-        #map
+        section.section-map
+            #map(data-locations=`${JSON.stringify(results.locations)}`)
 
-    section.section-reviews
-        .reviews
-            each review in results.reviews
-                +reviewCard(review)
+        section.section-reviews
+            .reviews
+                each review in results.reviews
+                    +reviewCard(review)
 
-    section.section-cta
-        .cta
-            .cta__img.cta__img--logo
-            img(src="/img/logo-green.png", alt='Natours logo')
-            img.cta__img.cta__img--1(src=`/img/tours/${results.images[1]}`, alt='')
-            img.cta__img.cta__img--2(src=`/img/tours/${results.images[2]}`, alt='')
-            .cta__content
-            h2.heading-secondary What are you waiting for?
-            p.cta__text= `${results.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-            button.btn.btn--green.span-all-rows Book tour now!
+        section.section-cta
+            .cta
+                .cta__img.cta__img--logo
+                img(src="/img/logo-green.png", alt='Natours logo')
+                img.cta__img.cta__img--1(src=`/img/tours/${results.images[1]}`, alt='')
+                img.cta__img.cta__img--2(src=`/img/tours/${results.images[2]}`, alt='')
+                .cta__content
+                h2.heading-secondary What are you waiting for?
+                p.cta__text= `${results.duration} days. 1 adventure. Infinite memories. Make it yours today!`
+                button.btn.btn--green.span-all-rows Book tour now!
+
+        include _footer
+
+        <script src="/js/mapbox.js"></script>

@@ -25,6 +25,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 1) for HTTP header 
 app.use(helmet());
+// app.use(
+//       helmet.contentSecurityPolicy({
+//             directives: {
+//                   defaultSrc: ["'self'"],
+//                   baseUri: ["'self'"],
+//                   fontSrc: ["'self'", 'https:', 'data:'],
+//                   scriptSrc: ["'self'", 'https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js .com'],
+//                   objectSrc: ["'none'"],
+//                   styleSrc: ["'self'", 'https:', 'unsafe-inline'],
+//                   upgradeInsecureRequests: [],
+//             },
+//       })
+// );
 
 
 // 2) for Cookie sending
