@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Name has to be there'],
     },
+    photo: String,
     email: {
         type: String,
         required: [true, 'Email has to be there'],

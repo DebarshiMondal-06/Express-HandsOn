@@ -53,7 +53,7 @@ exports.login = async (req, res, next) => {
 			httpOnly: true
 		};
 		// console.log(cookieOptions);
-		res.cookie('jwt', token, cookieOptions);
+		res.cookie('loginjwt', token, cookieOptions);
 		res.status(200).json({
 			status: "Success",
 			U_token: token
@@ -68,10 +68,15 @@ exports.protect = async (req, res, next) => {
 	try {
 		// 1) getting token and checks it there.............
 		let verifyToken;
+
 		if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
 			verifyToken = req.headers.authorization.split(' ')[1];
 			// console.log(verifyToken);
+		} else if (req.cookies.loginjwt) {
+			verifyToken = req.cookies.loginjwt;
 		}
+
+
 		if (!verifyToken) {
 			return next(new AppError(`Logined Failed! Please try again to get access.`, 401));
 		}
@@ -186,5 +191,46 @@ exports.resetPassowrd = async (req, res, next) => {
 
 	} catch (error) {
 		return next(new AppError(`${error}`, 500))
+	}
+}
+
+
+
+// Check only for render pages..................
+exports.isLoggedIn = async (req, res, next) => {
+	try {
+		if (req.cookies.loginjwt) {
+			// 2.) Verification Token .........................................
+			const decode = await verificationtoken(
+				req.cookies.loginjwt,
+				process.env.JWT_SECRET
+			);
+
+			// 3.) Check if user still exists................................
+			const CurrentUser = await User.findById(decode.id);           //finding single ID......
+			if (!CurrentUser) {
+				return next();
+			}
+
+			// 4.) Check if user changed password after token created
+			if (CurrentUser.changePasswordAfter(decode.iat)) {
+				return next();
+			}
+
+			// There is a logined in USER..................
+			res.locals.user = CurrentUser;
+		}
+		next();
+	}
+	catch (error) {
+		if (error.name === "JsonWebTokenError") {
+			return next(new AppError(`Invalid token, Please logined Again`, 401));
+		}
+		if (error.name === "TokenExpiredError") {
+			return next(new AppError(`Token Expires, Please logined Again`, 401));
+		}
+		else {
+			return next(new AppError(`${error}`, 404));
+		}
 	}
 }

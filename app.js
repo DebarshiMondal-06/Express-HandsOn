@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -15,19 +16,24 @@ const Tour_Router = require('./Routes/Tour_Routes');
 const User_Router = require('./Routes/User_Routes');
 const Review_Router = require('./Routes/Review_Routes');
 
-
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-//for all static files
-app.use(express.static(path.join(__dirname, 'public'))); 
-
+app.use(cors());
 
 // GLOBAL Middlewares for Express...................
 
 // 1) for HTTP header 
-app.use(helmet());
+app.use(helmet({
+      contentSecurityPolicy: false
+}));
 
-// 2) for Cookie sending
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+//for all static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+// 2) for Cookie sending and parsing...........
 app.use(cookieParser());
 
 // 3) For Parsing data on req.body......................
@@ -44,13 +50,12 @@ app.use(xss());
 app.use(hpp());
 
 const limiter = rateLimit({
-      max: 2,
+      max: 10,
       windowMs: 60 * 60 * 1000,
       message: 'Too many Request from this IP! Please try again in an hour!'
 });
 // For Rate limiting for APIs.
 app.use('/', limiter);
-
 
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);
