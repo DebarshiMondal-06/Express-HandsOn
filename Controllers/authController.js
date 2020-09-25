@@ -49,7 +49,7 @@ exports.login = async (req, res, next) => {
 		}
 		const token = await getToken(loginuser._id);
 		const cookieOptions = {
-			expire: 360000 + Date.now(),
+			expires: new Date(Date.now() + 10 * 1000),
 			httpOnly: true
 		};
 		// console.log(cookieOptions);
@@ -63,6 +63,14 @@ exports.login = async (req, res, next) => {
 	}
 }
 
+
+exports.logout = (req, res, next) => {
+	res.cookie('loginjwt', 'loggedOut', {
+		expires: new Date(Date.now() + 60 * 60 * 1000),
+		httpOnly: true
+	});
+	return next();
+};
 
 exports.protect = async (req, res, next) => {
 	try {
@@ -223,14 +231,6 @@ exports.isLoggedIn = async (req, res, next) => {
 		next();
 	}
 	catch (error) {
-		if (error.name === "JsonWebTokenError") {
-			return next(new AppError(`Invalid token, Please logined Again`, 401));
-		}
-		if (error.name === "TokenExpiredError") {
-			return next(new AppError(`Token Expires, Please logined Again`, 401));
-		}
-		else {
-			return next(new AppError(`${error}`, 404));
-		}
+		return next();
 	}
 }
