@@ -18,27 +18,14 @@ const Review_Router = require('./Routes/Review_Routes');
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+//for all static files
+app.use(express.static(path.join(__dirname, 'public'))); 
 
-app.use(express.static(path.join(__dirname, 'public')));
 
 // GLOBAL Middlewares for Express...................
 
 // 1) for HTTP header 
 app.use(helmet());
-// app.use(
-//       helmet.contentSecurityPolicy({
-//             directives: {
-//                   defaultSrc: ["'self'"],
-//                   baseUri: ["'self'"],
-//                   fontSrc: ["'self'", 'https:', 'data:'],
-//                   scriptSrc: ["'self'", 'https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js .com'],
-//                   objectSrc: ["'none'"],
-//                   styleSrc: ["'self'", 'https:', 'unsafe-inline'],
-//                   upgradeInsecureRequests: [],
-//             },
-//       })
-// );
-
 
 // 2) for Cookie sending
 app.use(cookieParser());
@@ -57,12 +44,12 @@ app.use(xss());
 app.use(hpp());
 
 const limiter = rateLimit({
-      max: 10,
+      max: 2,
       windowMs: 60 * 60 * 1000,
       message: 'Too many Request from this IP! Please try again in an hour!'
 });
 // For Rate limiting for APIs.
-app.use('/api', limiter);
+app.use('/', limiter);
 
 
 // Routes Mounting .................................
