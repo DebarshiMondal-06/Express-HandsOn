@@ -9,24 +9,23 @@ const updateData = async (name, email) => {
             }
         });
         if (res.data.message === 'Success') {
-            // alert('Updated!');
-            // window.setTimeout(() => {
-            //     location.assign('/me');
-            // }, 500);
-            mdb.Alert.getInstance(document.getElementById('#placement-example')).show();
+            alert('Updated!');
+            window.setTimeout(() => {
+                location.assign('/me');
+            }, 800);
         }
     } catch (error) {
-        if (error.response.data.message === 'fail') {
+        if (error) {
             window.setTimeout(() => {
                 location.assign('/me')
             }, 800);
         }
         else {
-            // alert('Something went wrong! Try again Later')
-            mdb.Alert.getInstance(document.getElementById('.main')).show();
+            alert('Something went wrong! Try again Later');
         }
     }
 }
+
 
 document.querySelector('.form-user-data').addEventListener('submit', (e) => {
     e.preventDefault();
