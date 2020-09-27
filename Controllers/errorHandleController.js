@@ -22,6 +22,11 @@ module.exports.errorfunction = (error, req, res, next) => {
             getDevError(error, res);
       }
       else if (process.env.NODE_ENV === "production") {
+            if (error.message === 'JsonWebTokenError') {
+                  error.message = 'Login Failed! Try again!'
+                  getProdError(error, res)
+            }
+            console.log(error.message);
             getProdError(error, res);
       }
 }

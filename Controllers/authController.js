@@ -49,7 +49,7 @@ exports.login = async (req, res, next) => {
 		}
 		const token = await getToken(loginuser._id);
 		const cookieOptions = {
-			expires: new Date(Date.now() + 10 * 1000),
+			expires: new Date(Date.now() + 1000 * 1000),
 			httpOnly: true
 		};
 		// console.log(cookieOptions);
@@ -101,11 +101,13 @@ exports.protect = async (req, res, next) => {
 			return next(new AppError(`User recently chnged password! Please login Again`, 401));
 		}
 		// Grant Access to Protected Route......................
-		req.user = CurrentUser;
+		res.user = CurrentUser;
+		res.locals.user = CurrentUser;
 		next();
+
 	} catch (error) {
 		if (error.name === "JsonWebTokenError") {
-			return next(new AppError(`Invalid token, Please logined Again`, 401));
+			return next(new AppError(`${error.name}`, 401));
 		}
 		if (error.name === "TokenExpiredError") {
 			return next(new AppError(`Token Expires, Please logined Again`, 401));

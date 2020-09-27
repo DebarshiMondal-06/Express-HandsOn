@@ -37,7 +37,7 @@ exports.getTours = async (req, res, next) => {
 }
 
 
-exports.loginpage = async (req, res, next) => {
+exports.loginpage = (req, res, next) => {
     try {
         res
             .status(200)
@@ -47,4 +47,10 @@ exports.loginpage = async (req, res, next) => {
     } catch (error) {
         return next(new AppError(`${error}`));
     }
+}
+
+exports.getAccount = (req, res) => {
+    res.status(200).render('account', {
+        title: "Account"
+    });
 }
