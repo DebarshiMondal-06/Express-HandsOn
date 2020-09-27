@@ -19,6 +19,12 @@ exports.getTours = async (req, res, next) => {
             path: 'reviews',
             fields: 'review rating whichUser'
         });
+
+        if (!gettour) {
+            console.log(req);
+            return next(new AppError(`Tour not exist for this Routes`, 404));
+        }
+
         res
             .status(200)
             .render('tour', {

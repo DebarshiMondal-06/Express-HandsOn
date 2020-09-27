@@ -1,11 +1,3 @@
-const AppError = require("../Classes/appError");
-
-// const dbError = (err) => {
-//       const message = `Invalid Id : ${err.value}`;
-//       return new AppError(message, 404);
-// };
-
-
 const getDevError = (error, res) => {
       res.status(error.statusCode).json({
             status: error.status,
@@ -15,10 +7,10 @@ const getDevError = (error, res) => {
 }
 
 const getProdError = (error, res) => {
-      res.status(error.statusCode).json({
-            status: error.status,
-            message: error.message,
-      });
+      res.status(error.statusCode).render('error', {
+            title: 'Not found!',
+            message: `${error.statusCode} | ${error.message} 😠`
+      })
 }
 
 
