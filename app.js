@@ -38,6 +38,7 @@ app.use(cookieParser());
 
 // 3) For Parsing data on req.body......................
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Data Santization against NoSQL query injection..........
 app.use(mongoSanitize());

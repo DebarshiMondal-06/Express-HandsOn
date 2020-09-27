@@ -10,7 +10,7 @@ const getProdError = (error, res) => {
       res.status(error.statusCode).render('error', {
             title: 'Not found!',
             message: `${error.statusCode} | ${error.message} 😠`
-      })
+      });
 }
 
 
@@ -26,7 +26,6 @@ module.exports.errorfunction = (error, req, res, next) => {
                   error.message = 'Login Failed! Try again!'
                   getProdError(error, res)
             }
-            console.log(error.message);
             getProdError(error, res);
       }
 }

@@ -21,7 +21,7 @@ exports.updateMe = async (req, res, next) => {
                   return next(new AppError(`Email and name is required for Updation`, 404));
             }
             const fitlerBody = filterObj(req.body, "email", "name");
-            const findUser = await User.findByIdAndUpdate(req.user._id, fitlerBody, {
+            const findUser = await User.findByIdAndUpdate(req.user.id, fitlerBody, {
                   new: true,
                   runValidators: true
             });

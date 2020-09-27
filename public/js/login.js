@@ -1,6 +1,5 @@
 const login = async (email, password) => {
     try {
-        console.log(email);
         const res = await axios({
             method: 'post',
             url: '/api/v1/users/login',
@@ -16,11 +15,11 @@ const login = async (email, password) => {
             }, 1500);
         }
     } catch (error) {
-        alert(error.response.data.message);
+        alert("Incoreet Email and Pasword!");
     }
 }
 
-document.querySelector('.form').addEventListener('submit', (e) => {
+document.querySelector('.login--form').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
