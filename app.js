@@ -68,18 +68,7 @@ app.use('/', View_Router);
 
 // Error for no correct URL...................................
 app.all('*', (req, res, next) => {
-      // res.status(404).json({
-      //       Status: "Fail",
-      //       body: `No such ${req.OriginalUrl} request to proceed!`
-      // })
-
-      // const err = new Error(`No such ${req.OriginalUrl} request to proceed!`);
-      // err.status = 'fail';
-      // err.statusCode = 404;
-      // next(err); //err here simpify assumes an error and sends it to global error middleware.........
-
       next(new AppError(`No such ${req.originalUrl} request to proceed!`, 404));
-      // console.log(req);
 });
 
 // Global errorhandle middleware........................
