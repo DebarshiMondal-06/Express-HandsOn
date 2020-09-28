@@ -12,16 +12,13 @@ const updateData = async (data, type) => {
         });
         if (res.data.message === 'Success') {
             alert('Updated!');
-            window.setTimeout(() => {
-                location.assign('/me');
-            }, 800);
         }
     } catch (error) {
         if (error) {
             alert(error.response.data.message)
-            window.setTimeout(() => {
-                location.assign('/me')
-            }, 800);  
+            setTimeout(() => {
+                location.assign('/me');
+            }, 800);
         }
     }
 }
@@ -34,11 +31,18 @@ document.querySelector('.form-user-data').addEventListener('submit', (e) => {
     updateData({ name, email }, 'data')
 });
 
-document.querySelector('.form-user-settings').addEventListener('submit', (e) => {
+document.querySelector('.form-user-settings').addEventListener('submit', async (e) => {
     e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'updating....'
+
     const currentPassword = document.getElementById('password-current').value;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
-    updateData({ currentPassword, password, passwordConfirm }, 'password')
+    await updateData({ currentPassword, password, passwordConfirm }, 'password')
+
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
 });
 

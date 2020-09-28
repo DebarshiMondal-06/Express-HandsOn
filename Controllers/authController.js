@@ -45,7 +45,7 @@ exports.login = async (req, res, next) => {
 		const loginuser = await User.findOne({ email, Active: { $ne: false } }).select('+password');
 		// const correct = ; // return true or false
 		if (!loginuser || !await loginuser.correctPassword(C_password, loginuser.password)) {
-			return next(new AppError(`Incorrect email or password`, 401));
+			return next(new AppError(`Incorrect email or password`, 501));
 		}
 		const token = await getToken(loginuser._id);
 		const cookieOptions = {
@@ -210,7 +210,7 @@ exports.updatePassword = async (req, res, next) => {
 	try {
 		const currentUser = await User.findById(req.user._id).select('+password');
 		if (!(await currentUser.correctPassword(req.body.currentPassword, currentUser.password))) {
-			return next(new AppError(`Your current password is wrong! Try Again`, 401));
+			return next(new AppError(`Your current password is wrong! Try Again`, 501));
 		}
 		currentUser.password = req.body.password;
 		currentUser.confirmPassword = req.body.passwordConfirm;
@@ -230,17 +230,11 @@ exports.updatePassword = async (req, res, next) => {
 		});
 
 	} catch (error) {
-		return next(new AppError(`${error}`, 401));
+		if (error.errors.confirmPassword) return next(new AppError(`${error.errors.confirmPassword.message}`, 501));
+		if (error.errors.password) return next(new AppError(`${error.errors.password.message}`, 501));
+		if (error) return next(new AppError(`${error}`, 501));
 	}
 }
-
-
-
-
-
-
-
-
 
 
 

@@ -7,10 +7,18 @@ const getDevError = (error, res) => {
 }
 
 const getProdError = (error, res) => {
-      res.status(error.statusCode).render('error', {
+     if(error.status === 'error')
+     {
+           res.status(error.statusCode).json({
+                 message: error.message
+           })
+     }
+     else{
+            res.status(error.statusCode).render('error', {
             title: 'Not found!',
             message: `${error.statusCode} | ${error.message} 😠`
       });
+     }
 }
 
 
