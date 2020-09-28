@@ -210,7 +210,7 @@ exports.updatePassword = async (req, res, next) => {
 	try {
 		const currentUser = await User.findById(req.user._id).select('+password');
 		if (!(await currentUser.correctPassword(req.body.currentPassword, currentUser.password))) {
-			return next(new AppError(`Your current password is wrong!`, 401));
+			return next(new AppError(`Your current password is wrong! Try Again`, 401));
 		}
 		currentUser.password = req.body.password;
 		currentUser.confirmPassword = req.body.passwordConfirm;
@@ -224,7 +224,7 @@ exports.updatePassword = async (req, res, next) => {
 
 		res.cookie('loginjwt', createSendToken, cookieOptions);
 		res.status(200).json({
-			status: 'Success',
+			message: 'Success',
 			token: createSendToken,
 			data: currentUser
 		});
