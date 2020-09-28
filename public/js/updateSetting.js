@@ -14,11 +14,13 @@ const updateData = async (data, type) => {
             alert('Updated!');
         }
     } catch (error) {
-        if (error) {
-            alert(error.response.data.message)
+        if (error.response.data.status === 'error') {
+            alert(error.response.data.message) }
+        else {
+            alert('Something went wrong!')
             setTimeout(() => {
-                location.assign('/me');
-            }, 800);
+                location.assign('/me')
+            });
         }
     }
 }

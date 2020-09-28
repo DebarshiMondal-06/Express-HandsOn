@@ -11,7 +11,6 @@ const filterObj = (obj, ...allowedfields) => {
                   Object.assign(newObj, obj);
             }
       });
-      console.log(newObj);
       return newObj;
 }
 exports.updateMe = async (req, res, next) => {

@@ -51,7 +51,7 @@ app.use(xss());
 app.use(hpp());
 
 const limiter = rateLimit({
-      max: 20,
+      max: 25,
       windowMs: 60 * 60 * 1000,
       message: 'Too many Request from this IP! Please try again in an hour!'
 });
