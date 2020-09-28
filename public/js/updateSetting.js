@@ -1,5 +1,9 @@
 const updateData = async (name, email) => {
     try {
+
+        const url = (type === 'password') ? 
+            ''
+
         const res = await axios({
             method: 'put',
             url: '/api/v1/users/updateMe',
@@ -21,7 +25,7 @@ const updateData = async (name, email) => {
             }, 800);
         }
         else {
-            alert('Something went wrong! Try again Later');
+            alert(`Update didn't Work! Try again Later`);
         }
     }
 }

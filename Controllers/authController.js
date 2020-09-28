@@ -96,7 +96,7 @@ exports.protect = async (req, res, next) => {
 		if (!CurrentUser) {
 			return next(new AppError(`User doesn't exists longer!`, 401));
 		}
-		
+
 		// 4.) Check if user changed password after token created
 		if (CurrentUser.changePasswordAfter(decode.iat)) {
 			return next(new AppError(`User recently chnged password! Please login Again`, 401));
@@ -204,6 +204,44 @@ exports.resetPassowrd = async (req, res, next) => {
 		return next(new AppError(`${error}`, 500))
 	}
 }
+
+
+exports.updatePassword = async (req, res, next) => {
+	try {
+		const currentUser = await User.findById(req.user._id).select('+password');
+		if (!(await currentUser.correctPassword(req.body.currentPassword, currentUser.password))) {
+			return next(new AppError(`Your current password is wrong!`, 401));
+		}
+		currentUser.password = req.body.password;
+		currentUser.confirmPassword = req.body.passwordConfirm;
+		await currentUser.save();
+
+		const createSendToken = await getToken(currentUser._id);
+		const cookieOptions = {
+			expires: new Date(Date.now() + 1000 * 1000),
+			httpOnly: true
+		};
+
+		res.cookie('loginjwt', createSendToken, cookieOptions);
+		res.status(200).json({
+			status: 'Success',
+			token: createSendToken,
+			data: currentUser
+		});
+
+	} catch (error) {
+		return next(new AppError(`${error}`, 401));
+	}
+}
+
+
+
+
+
+
+
+
+
 
 
 
