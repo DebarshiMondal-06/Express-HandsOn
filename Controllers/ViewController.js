@@ -54,3 +54,9 @@ exports.getAccount = (req, res) => {
         title: "Account"
     });
 }
+
+exports.logoutpage = (req, res) => {
+    res.status(200).render('logout', {
+        title: 'logout'
+    });
+}
