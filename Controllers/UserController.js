@@ -1,6 +1,32 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
 const factory = require('../Controllers/handlerFunction');
+const multer = require('multer');
+
+const multerStorage = multer.diskStorage({
+      destination: (req, file, cb) => {
+            cb(null, 'public/img/users');
+      },
+      filename: (req, file, cb) => {
+            const ext = file.mimetype.split('/')[1];
+            cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+      }
+});
+const multerFilter = (req, file, cb) => {
+      if (file.mimetype.startsWith('image')) {
+            cb(null, true);
+      }
+      else {
+            cb(new AppError('Not an image! Please upload only images', 501), false);
+      }
+};
+const upload = multer({
+      storage: multerStorage,
+      fileFilter: multerFilter
+});
+exports.uploadUserPhoto = upload.single('photo');
+
+
 
 // Filtering Req. Key name....................
 const filterObj = (obj, ...allowedfields) => {
@@ -13,13 +39,19 @@ const filterObj = (obj, ...allowedfields) => {
       });
       return newObj;
 }
+
 exports.updateMe = async (req, res, next) => {
       try {
+            console.log(req.file);
+            console.log(req.body);
+
             const { email, name } = req.body;
             if (!email || !name) {
                   return next(new AppError(`Email and name is required for Updation`, 404));
             }
             const fitlerBody = filterObj(req.body, "email", "name");
+            if (req.file) fitlerBody.photo = req.file.filename;
+            
             const findUser = await User.findByIdAndUpdate(req.user.id, fitlerBody, {
                   new: true,
                   runValidators: true
