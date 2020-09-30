@@ -15,7 +15,8 @@ const updateData = async (data, type) => {
         }
     } catch (error) {
         if (error.response.data.status === 'error') {
-            alert(error.response.data.message) }
+            alert(error.response.data.message)
+        }
         else {
             alert('Something went wrong!')
             setTimeout(() => {
@@ -28,9 +29,11 @@ const updateData = async (data, type) => {
 
 document.querySelector('.form-user-data').addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value;
-    const name = document.getElementById('name').value;
-    updateData({ name, email }, 'data')
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value)
+    form.append('email', document.getElementById('email').value)
+    form.append('photo', document.getElementById('photo').files[0])
+    updateData(form, 'data');
 });
 
 document.querySelector('.form-user-settings').addEventListener('submit', async (e) => {
