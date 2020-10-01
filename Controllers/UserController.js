@@ -32,16 +32,20 @@ const upload = multer({
 });
 exports.uploadUserPhoto = upload.single('photo');
 
-exports.resizeImage = (req, res, next) => {
-      if (!req.file) return next();
-      req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+exports.resizeImage = async (req, res, next) => {
+      try {
+            if (!req.file) return next();
+            req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
-      sharp(req.file.buffer)
-            .resize(400, 400)
-            .toFormat('jpeg')
-            .jpeg({ quality: 90 })
-            .toFile(`public/img/users/${req.file.filename}`);
-      next();
+            await sharp(req.file.buffer)
+                  .resize(400, 400)
+                  .toFormat('jpeg')
+                  .jpeg({ quality: 90 })
+                  .toFile(`public/img/users/${req.file.filename}`);
+            next();
+      } catch (error) {
+            return next(new AppError(`Error in resizing.`, 501));
+      }
 };
 // ends here image.....................
 
