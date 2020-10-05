@@ -1,7 +1,7 @@
 const User = require('../models/User_models');
 const AppError = require('../Classes/appError');
 const jwt = require('jsonwebtoken');
-const sendEmail = require('../Classes/emailMailer');
+const Email = require('../Classes/emailMailer');
 const crypto = require('crypto');
 
 const getToken = async (id) => {
@@ -17,6 +17,9 @@ const verificationtoken = async (token, secret) => {
 exports.signup = async (req, res, next) => {
 	try {
 		const user = await User.create(req.body);
+		const url = `${req.protocol}://${req.get('host')}/me`;
+		await new Email(user, url).sendWelcome();
+
 		const token = await getToken(user._id);
 		const cookieOptions = {
 			expires: new Date(
@@ -147,11 +150,7 @@ exports.forgotpassword = async (req, res, next) => {
 		// // 3) send it via email 
 		const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
 		const message = `Forgot Your Password? Submit a Passowrd to reset your password! to \n ${resetURL}`;
-		await sendEmail({
-			email: user.email,
-			subject: 'Your Passowrd reset token (valid for 10 min)',
-			message
-		});
+		await new Email(user, resetURL).sendPasswordReset();
 		res.status(200).json({
 			status: 'Success',
 			message: 'Token sent to email!'
@@ -235,9 +234,6 @@ exports.updatePassword = async (req, res, next) => {
 		if (error) return next(new AppError(`${error}`, 501));
 	}
 }
-
-
-
 
 // Check only for render pages..................
 exports.isLoggedIn = async (req, res, next) => {

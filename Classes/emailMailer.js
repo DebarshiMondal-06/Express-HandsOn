@@ -16,7 +16,14 @@ module.exports = class Email {
 
 	newTransport() {
 		if (process.env.NODE_ENV === 'production') {
-			return 1; //sedngrid......
+			return nodemailer.createTransport({
+				host: 'smtp.gmail.com',
+				port: 587,
+				auth: {
+					user: "debarshimondal121@gmail.com",
+					pass: "piku88128"
+				}
+			});
 		}
 		return nodemailer.createTransport({
 			host: "smtp.mailtrap.io",
@@ -29,7 +36,7 @@ module.exports = class Email {
 	}
 
 	async send(template, subject) {
-		
+
 		// 1) Render email template........................
 		const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
 			firstName: this.firstName,
@@ -48,10 +55,13 @@ module.exports = class Email {
 
 		// 3) Transpoter and send email finally......
 		await this.newTransport().sendMail(mailoptions);
-
 	}
 
 	async sendWelcome() {
 		await this.send('welcome', 'Welcome to the Natours!');
+	}
+
+	async sendPasswordReset() {
+		await this.send('passwordReset', 'Reset your password here valid for 10min only');
 	}
 };
