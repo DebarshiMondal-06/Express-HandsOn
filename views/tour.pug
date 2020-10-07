@@ -8,6 +8,8 @@ html(lang="en")
         link(rel="shortcut icon", type="image/png", href="/img/favicon.png")
         link(rel="stylesheet" , href="https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css")
         script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js")
+        script(src='https://js.stripe.com/v3/')
     body
         include _header
 
@@ -100,8 +102,13 @@ html(lang="en")
                 .cta__content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text= `${results.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                button.btn.btn--green.span-all-rows Book tour now!
+                
+                if user
+                    button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${results.id}`) Book tour now!
+                else
+                    a.btn.btn--green.span-all-rows(href='/login') Login to Book Tour
 
         include _footer
 
         <script src="/js/mapbox.js"></script>
+        <script src="/js/stripe.js"></script>

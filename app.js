@@ -15,7 +15,7 @@ const View_Router = require('./Routes/View_Routes');
 const Tour_Router = require('./Routes/Tour_Routes');
 const User_Router = require('./Routes/User_Routes');
 const Review_Router = require('./Routes/Review_Routes');
-
+const BookingRouter = require('./Routes/Booking_Routes');
 app.use(cors());
 
 // GLOBAL Middlewares for Express...................
@@ -62,6 +62,7 @@ app.use('/', limiter);
 app.use('/api/v1/tours', Tour_Router);
 app.use('/api/v1/users', User_Router);
 app.use('/api/v1/review', Review_Router);
+app.use('/api/v1/bookings', BookingRouter);
 app.use('/', View_Router);
 
 
