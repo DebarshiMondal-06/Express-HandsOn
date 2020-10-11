@@ -257,6 +257,7 @@ exports.isLoggedIn = async (req, res, next) => {
 			}
 
 			// There is a logined in USER..................
+			req.userexist = CurrentUser;
 			res.locals.user = CurrentUser;
 		}
 		next();

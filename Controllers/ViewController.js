@@ -40,6 +40,7 @@ exports.getTours = async (req, res, next) => {
 
 
 exports.loginpage = (req, res, next) => {
+    if (req.userexist) res.redirect('/');
     try {
         res
             .status(200)
