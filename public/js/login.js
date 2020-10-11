@@ -15,7 +15,7 @@ const login = async (email, password) => {
             }, 1500);
         }
     } catch (error) {
-        alert(`${error}`);
+        alert(`${error}`, 501);
     }
 }
 

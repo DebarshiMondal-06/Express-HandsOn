@@ -107,6 +107,7 @@ exports.getOne = (Model, options) => {
     }
 }
 
+
 exports.getall = (Model) => {
     return async (req, res, next) => {
         try {
