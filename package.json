@@ -4,7 +4,8 @@
   "description": "Learning node, express, mongodb",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "Debarshi",
   "license": "ISC",
@@ -37,5 +38,8 @@
     "util": "^0.12.3",
     "validator": "^13.1.1",
     "xss-clean": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
