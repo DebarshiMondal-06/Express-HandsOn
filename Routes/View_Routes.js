@@ -13,7 +13,7 @@ View_Router.get('/', bookingController.createBookingCheckout, View_Controller.ge
 View_Router.get('/tours/:id', View_Controller.getTours);
 View_Router.get('/login', View_Controller.loginpage);
 View_Router.get('/logout', authController.logout, View_Controller.logoutpage);
-
+View_Router.get('/my-tours', authController.protect, View_Controller.getMyTours);
 
 
 

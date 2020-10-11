@@ -29,6 +29,7 @@ bookingSchema.pre(/^find/, function (next) {
     path: 'bookingtour',
     select: 'name'
   });
+  next();
 });
 
 
