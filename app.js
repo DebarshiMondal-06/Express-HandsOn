@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const AppError = require('./Classes/appError.js');
 const { errorfunction } = require('./Controllers/errorHandleController.js');
+const compression = require('compression');
 // Routes................................
 const View_Router = require('./Routes/View_Routes');
 const Tour_Router = require('./Routes/Tour_Routes');
@@ -57,6 +58,8 @@ const limiter = rateLimit({
 });
 // For Rate limiting for APIs.
 app.use('/', limiter);
+
+app.use(compression());
 
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);

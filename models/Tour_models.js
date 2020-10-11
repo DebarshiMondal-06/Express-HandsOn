@@ -125,7 +125,7 @@ TourSchema.pre(/^find/, function (next) {  // 'pre' always run before a query ex
 });
 
 TourSchema.post(/^find/, function (docs, next) { // 'post' always run after a query exeecute.............
-    console.log(`the time taken to execute query is ${Date.now() - this.start} milliseconds`);
+    // console.log(`the time taken to execute query is ${Date.now() - this.start} milliseconds`);
     next();
 });
 

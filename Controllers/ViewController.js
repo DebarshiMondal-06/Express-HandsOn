@@ -24,7 +24,6 @@ exports.getTours = async (req, res, next) => {
         });
 
         if (!gettour) {
-            console.log(req);
             return next(new AppError(`Tour not exist for this Routes`, 404));
         }
 
