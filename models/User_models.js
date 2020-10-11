@@ -82,14 +82,14 @@ UserSchema.methods.changePasswordAfter = function (JWTTimestamp) {
 
 UserSchema.methods.createPasswordResetToken = function () {
     const resetToken = crypto.randomBytes(32).toLocaleString('hex');
-    console.log({ resetToken });
+    // console.log({ resetToken });
 
     // Encrypted password token for security..................
     this.passwordResetToken = crypto
         .createHash('sha256')
         .update(resetToken)
         .digest('hex');
-    console.log(this.passwordResetToken);
+    // console.log(this.passwordResetToken);
 
     // Expires token after 10 min..
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
