@@ -31,11 +31,11 @@ exports.signup = async (req, res, next) => {
 			U_token: token
 		});
 	} catch (error) {
-			if(error.code == 11000) return next(new AppError('Email Already exist', 501));
-			if (error.errors.password) return next(new AppError(`${error.errors.password.message}`, 501));
-			if (error.errors.confirmPassword) return next(new AppError(`${error.errors.confirmPassword.message}`, 501));
-			return next(new AppError(`${error}`, 501));
-}
+		if (error.code == 11000) return next(new AppError('Email Already exist', 501));
+		if (error.errors.password) return next(new AppError(`${error.errors.password.message}`, 501));
+		if (error.errors.confirmPassword) return next(new AppError(`${error.errors.confirmPassword.message}`, 501));
+		return next(new AppError(`${error}`, 501));
+	}
 }
 
 exports.login = async (req, res, next) => {
