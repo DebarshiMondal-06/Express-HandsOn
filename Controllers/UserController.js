@@ -3,6 +3,7 @@ const AppError = require('../Classes/appError');
 const factory = require('../Controllers/handlerFunction');
 const multer = require('multer');
 const sharp = require('sharp');
+const fs = require('fs');
 
 
 // const multerStorage = multer.diskStorage({
@@ -49,8 +50,13 @@ exports.resizeImage = async (req, res, next) => {
 };
 // ends here image.....................
 
-
-
+const deleteImgae = async (photo) => {
+      const path = `public/img/users/${photo}`;
+      return fs.unlink(path, err => {
+            if (err) console.log(err);
+            console.log("Success delete");
+      });
+}
 
 // Filtering Req. Key name....................
 const filterObj = (obj, ...allowedfields) => {
@@ -71,8 +77,14 @@ exports.updateMe = async (req, res, next) => {
                   return next(new AppError(`Email and name is required for Updation`, 404));
             }
             const fitlerBody = filterObj(req.body, "email", "name");
-            if (req.file) fitlerBody.photo = req.file.filename;
-
+            if (req.file) {
+                  fitlerBody.photo = req.file.filename;
+                  await deleteImgae(req.user.photo);
+            }
+            else {
+                  fitlerBody.photo = `${req.user.photo}`;
+                  console.log(fitlerBody.photo);
+            }
             const findUser = await User.findByIdAndUpdate(req.user.id, fitlerBody, {
                   new: true,
                   runValidators: true

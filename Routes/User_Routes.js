@@ -14,7 +14,7 @@ User_Router.patch('/resetPassword/:token', authController.resetPassowrd);
 
 
 User_Router.use(authController.protect); //Auth Controller..........after this
-User_Router.put('/UpdateMyPassword', authController.protect, authController.updatePassword);
+User_Router.put('/UpdateMyPassword', authController.updatePassword);
 User_Router.put('/updateMe', UserController.uploadUserPhoto, UserController.resizeImage, UserController.updateMe);
 User_Router.get('/me', UserController.get_me, UserController.get_user);
 
