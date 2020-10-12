@@ -39,6 +39,20 @@ exports.getTours = async (req, res, next) => {
 }
 
 
+exports.signupage = (req, res, next) => {
+    if (req.userexist) res.redirect('/');
+    try {
+        res
+            .status(200)
+            .render('signup', {
+                title: 'SignUp'
+            })
+    } catch (error) {
+        return next(new AppError(`${error}`, 404));
+    }
+}
+
+
 exports.loginpage = (req, res, next) => {
     if (req.userexist) res.redirect('/');
     try {
@@ -48,7 +62,7 @@ exports.loginpage = (req, res, next) => {
                 title: 'Login'
             })
     } catch (error) {
-        return next(new AppError(`${error}`));
+        return next(new AppError(`${error}`, 404));
     }
 }
 
@@ -58,11 +72,6 @@ exports.getAccount = (req, res) => {
     });
 }
 
-exports.logoutpage = (req, res) => {
-    res.status(200).render('logout', {
-        title: 'logout'
-    });
-}
 
 exports.getMyTours = async (req, res, next) => {
     try {
@@ -82,7 +91,11 @@ exports.getMyTours = async (req, res, next) => {
 }
 
 
-
+exports.logoutpage = (req, res) => {
+    res.status(200).render('logout', {
+        title: 'logout'
+    });
+}
 
 
 

@@ -22,9 +22,8 @@ const getProdError = (error, res) => {
 
 
 module.exports.errorfunction = (error, req, res, next) => {
-      error.status = error.status || 'error';
-      error.statusCode = error.statusCode || 500;
-
+      // error.status = error.status || 'error';
+      // error.statusCode = error.statusCode || 500;
       if (process.env.NODE_ENV === "development") {
             getDevError(error, res);
       }

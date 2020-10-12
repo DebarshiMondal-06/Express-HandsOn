@@ -1,6 +1,5 @@
 const updateData = async (data, type) => {
     try {
-
         const url = (type === 'password')
             ? '/api/v1/users/UpdateMyPassword'
             : '/api/v1/users/updateMe'

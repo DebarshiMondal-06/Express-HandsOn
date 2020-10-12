@@ -28,7 +28,7 @@ app.use(helmet({
 
 
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(`${__dirname}`, 'views'));
 //for all static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -52,7 +52,7 @@ app.use(xss());
 app.use(hpp());
 
 const limiter = rateLimit({
-      max: 25,
+      max: 30,
       windowMs: 60 * 60 * 1000,
       message: 'Too many Request from this IP! Please try again in an hour!'
 });

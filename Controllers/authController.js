@@ -22,22 +22,21 @@ exports.signup = async (req, res, next) => {
 
 		const token = await getToken(user._id);
 		const cookieOptions = {
-			expires: new Date(
-				Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-			),
+			expires: new Date(Date.now() + 1000 * 1000),
 			httpOnly: true
 		};
-		res.cookie('jwt', token, cookieOptions);
-		res.status(404).json({
+		res.cookie('loginjwt', token, cookieOptions);
+		res.status(200).json({
 			status: "Success",
-			U_token: token,
-			result: user
+			U_token: token
 		});
 	} catch (error) {
-		return next(new AppError(`${error}`, 401));
-	}
+			if(error.code == 11000) return next(new AppError('Email Already exist', 501));
+			if (error.errors.password) return next(new AppError(`${error.errors.password.message}`, 501));
+			if (error.errors.confirmPassword) return next(new AppError(`${error.errors.confirmPassword.message}`, 501));
+			return next(new AppError(`${error}`, 501));
 }
-
+}
 
 exports.login = async (req, res, next) => {
 	try {
