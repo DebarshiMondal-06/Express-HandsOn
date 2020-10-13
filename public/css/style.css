@@ -1402,3 +1402,10 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+
+
+.img-401page{
+  margin-top: 30rem;
+  text-align: center;
+  background-color:  #f7f7f7;
+}

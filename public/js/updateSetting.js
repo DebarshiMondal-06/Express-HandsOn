@@ -23,7 +23,7 @@ const updateData = async (data, type) => {
         else {
             alert('Something went wrong!')
             setTimeout(() => {
-                location.assign('/me')
+                location.reload();
             });
         }
     }

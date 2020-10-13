@@ -13,7 +13,7 @@ const getProdError = (error, res) => {
                   status: 'error'
             });
       }
-      res.status(error.statusCode).render('error', {
+      res.status(error.statusCode).render(`error-404`, {
             title: 'Not found!',
             message: `${error.statusCode} | ${error.message} 😠`
       });
