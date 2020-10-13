@@ -97,7 +97,11 @@ exports.logoutpage = (req, res) => {
     });
 }
 
-
+exports.forgotpage = (req, res) => {
+    res.status(200).render('forgot', {
+        title: 'Forgot Password'
+    })
+}
 
 
 

@@ -34,6 +34,7 @@ const auth = async (data, type) => {
         if (error.response.data.status === 'error') {
             alert(error.response.data.message)
             await textChange('.text-login', 'Try Again');
+            document.getElementById("btn-dis").disabled = 
         }
         else {
             alert('Something went wrong!')
@@ -59,6 +60,7 @@ if (getSignup) {
     getSignup.addEventListener('submit', async (e) => {
         e.preventDefault();
         await textChange('.text-login', 'Creating....');
+        document.getElementById("btn-dis").disabled = true;
         const name = getValue('name');
         const email = getValue('email');
         const password = getValue('password');

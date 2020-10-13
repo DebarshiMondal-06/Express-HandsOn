@@ -15,6 +15,7 @@ View_Router.get('/signup', View_Controller.signupage);
 View_Router.get('/login', View_Controller.loginpage);
 View_Router.get('/logout', authController.logout, View_Controller.logoutpage);
 View_Router.get('/my-tours', authController.protect, View_Controller.getMyTours);
+View_Router.get('/forgot-password', View_Controller.forgotpage);
 
 
 
