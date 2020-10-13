@@ -1409,3 +1409,16 @@ body {
   text-align: center;
   background-color:  #f7f7f7;
 }
+
+.forgot-pass{
+  float: right;
+  margin-top: -6rem;
+}
+
+.forgot-pass .forgot-link{
+  color: slateblue;
+  font-size: 1.6em;
+  padding: 15px;
+  font-weight: bold;
+  text-decoration: none;
+}
