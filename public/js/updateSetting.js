@@ -11,10 +11,14 @@ const updateData = async (data, type) => {
         });
         if (res.data.message === 'Success') {
             alert('Updated!');
+            window.setTimeout(() => {
+                location.reload();
+            }, 1000);
         }
     } catch (error) {
         if (error.response.data.status === 'error') {
             alert(error.response.data.message)
+            document.querySelector('.textChanging').textContent = 'Try Again'
         }
         else {
             alert('Something went wrong!')
@@ -28,6 +32,7 @@ const updateData = async (data, type) => {
 
 document.querySelector('.form-user-data').addEventListener('submit', (e) => {
     e.preventDefault();
+    document.querySelector('.textChanging').textContent = 'Updating....'
     const form = new FormData();
     form.append('name', document.getElementById('name').value)
     form.append('email', document.getElementById('email').value)
