@@ -22,7 +22,7 @@ exports.signup = async (req, res, next) => {
 
 		const token = await getToken(user._id);
 		const cookieOptions = {
-			expires: new Date(Date.now() + 1000 * 1000),
+			expires: new Date(Date.now() + 3600 * 1000),
 			httpOnly: true
 		};
 		res.cookie('loginjwt', token, cookieOptions);
@@ -51,7 +51,7 @@ exports.login = async (req, res, next) => {
 		}
 		const token = await getToken(loginuser._id);
 		const cookieOptions = {
-			expires: new Date(Date.now() + 1000 * 1000),
+			expires: new Date(Date.now() + 3600 * 1000),
 			httpOnly: true
 		};
 		// console.log(cookieOptions);
@@ -101,7 +101,7 @@ exports.protect = async (req, res, next) => {
 
 		// 4.) Check if user changed password after token created
 		if (CurrentUser.changePasswordAfter(decode.iat)) {
-			return next(new AppError(`User recently chnged password! Please login Again`, 401));
+			return next(new AppError(`User recently changed password! Please login Again`, 401));
 		}
 		// Grant Access to Protected Route......................
 		req.user = CurrentUser;
@@ -110,10 +110,10 @@ exports.protect = async (req, res, next) => {
 
 	} catch (error) {
 		if (error.name === "JsonWebTokenError") {
-			return next(new AppError(`${error.name}`, 401));
+			return next(new AppError(`Invalid Token ID, Please login to get access.`, 401));
 		}
 		if (error.name === "TokenExpiredError") {
-			return next(new AppError(`Token Expires, Please logined Again`, 401));
+			return next(new AppError(`Token Expires, Please login to get access`, 401));
 		}
 		else {
 			return next(new AppError(`${error}`, 404));
