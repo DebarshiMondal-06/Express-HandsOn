@@ -1414,13 +1414,24 @@ body {
   float: right;
   margin-top: -6rem;
 }
+.forgot-pass:hover{
+  color: #20bf6b;
+  -webkit-transform: translateY(-2px);
+  transform: translateY(-2px);
+  text-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.5);
+  transition: 0.2s ease-in-out all;
+}
 
-.forgot-pass .forgot-link{
+.forgot-link{
   color: slateblue;
   font-size: 1.6em;
   padding: 15px;
   font-weight: bold;
   text-decoration: none;
+}
+
+.forgot-link:hover{
+  color: #20bf6b;
 }
 
 .container{
@@ -1438,15 +1449,17 @@ body {
   background-color: #55c57a!important;
 }
 .fa-lock{
-  color: black;
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.5);
 }
 .text-forgot{
   font-size: 1.6em;
+  padding: 10px;
 }
 .md-form #materialSubscriptionFormEmail{
   font-size: 2em;
   padding: 20px;
-  margin-top: 6rem!important;
+  margin-top: 5.5rem!important;
   text-align: center;
 }
 
@@ -1454,7 +1467,7 @@ button.btn.btn-outline-success{
   border-radius: 50px;
   padding: 8px;
   font-size: 2em;
-  margin-top: 4rem!important;
+  margin-top: 3.5rem!important;
   font-family: 'Courier New', Courier, monospace;
   outline-style: tomato!important;
 }
@@ -1463,4 +1476,5 @@ button.btn.btn-outline-success:hover{
   background-color: #55c57a!important;
   color: white!important;
   font-weight: bold;
+  text-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.5);
 }
