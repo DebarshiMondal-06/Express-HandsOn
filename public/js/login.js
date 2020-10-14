@@ -34,7 +34,7 @@ const auth = async (data, type) => {
         if (error.response.data.status === 'error') {
             alert(error.response.data.message)
             await textChange('.text-login', 'Try Again');
-            document.getElementById("btn-dis").disabled = 
+            document.getElementById("btn-dis").disabled = false
         }
         else {
             alert('Something went wrong!')

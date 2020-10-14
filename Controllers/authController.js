@@ -139,7 +139,7 @@ exports.forgotpassword = async (req, res, next) => {
 		const { email } = req.body;
 		user = await User.findOne({ email });
 		if (!user) {
-			return next(new AppError(`There is no user with this email`, 404));
+			return next(new AppError(`There is no user with this email`, 500));
 		}
 
 		// 2) Generate random token.....

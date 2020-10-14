@@ -1,32 +1,20 @@
 extends base
 
 block append head
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
 block content
   .container
-    .form-gap
-    .container
-      .row
-        .col-md-4.col-md-offset-4
-          .panel.panel-default
-            .panel-body
-              .text-center
-                h3
-                  i.fas.fa-key.fa-3x
-                h2.text-center Reset Your Password?
-                .panel-body
-                  form#register-form.form(action="" role="form" autocomplete="off" method="post")
-                    .form-group
-                      .input-group
-                        span.input-group-addon
-                          i.fas.fa-key
-                        input#password.form-control(name="pass1" placeholder="Enter New Password" type="password" required="")
-                    .form-group
-                      .input-group
-                        span.input-group-addon
-                          i.fas.fa-key
-                        input#password.form-control(name="pass2" placeholder="Confirm Password" type="password" required="")
-                    .form-group
-                      input.btn.btn-lg.btn-primary.btn-block(name="recover-submit" value="Reset Password" type="submit")
-                    input#token.hide(type="hidden" name="token" value="")
+    .card.forgot
+      h5.card-header.info-color.white-text.text-center.py-4
+        strong
+          i.fas.fa-lock.fa-6x
+      .card-body.px-lg-5
+        form.text-center(style="color: #757575;").forgotpass
+          p.text-forgot Recover your password here
+          .md-form
+            input#materialSubscriptionFormEmail.form-control(type="email", placeholder="Enter Email!" required).p-3.mt-5
+          button#btn-dis.btn.btn-outline-success.btn-rounded.btn-block.z-depth-0.my-4.waves-effect(type="submit").mb-5 Submit Here
+  
