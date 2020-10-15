@@ -27,4 +27,4 @@ document.querySelector('.forgotpass').addEventListener('submit', async (e) => {
   document.getElementById("btn-dis").disabled = true;
   const email = document.getElementById('materialSubscriptionFormEmail').value;
   await forgot({ email });
-})
+});

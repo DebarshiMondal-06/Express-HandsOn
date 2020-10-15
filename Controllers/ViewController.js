@@ -103,6 +103,15 @@ exports.forgotpage = (req, res) => {
     })
 }
 
+exports.resetPassword = (req, res, next) => {
+    if (req.params.token.length !== 64) {
+        return next(new AppError(`Invalid token Id`, 404));
+    }
+    res.status(200).render('ResetPass', {
+        title: 'Reset',
+        token: req.params.token
+    });
+}
 
 
 

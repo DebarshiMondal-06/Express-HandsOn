@@ -147,7 +147,7 @@ exports.forgotpassword = async (req, res, next) => {
 		await user.save({ validateBeforeSave: false });
 
 		// // 3) send it via email 
-		const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+		const resetURL = `${req.protocol}://${req.get('host')}/api/v1/user/resetPasswordSent/${resetToken}`;
 		const message = `Forgot Your Password? Submit a Passowrd to reset your password! to \n ${resetURL}`;
 		await new Email(user, resetURL).sendPasswordReset();
 		res.status(200).json({
@@ -171,7 +171,7 @@ exports.resetPassowrd = async (req, res, next) => {
 			.createHash('sha256')
 			.update(req.params.token)
 			.digest('hex');
-
+		console.log(req.params.token);
 		const userRequest = await User.findOne(
 			{
 				passwordResetToken: hashedToken,
@@ -180,7 +180,7 @@ exports.resetPassowrd = async (req, res, next) => {
 
 		// 2) if token has not expired and there is new user 
 		if (!userRequest) {
-			return next(new AppError(`Token is Invalid or expired!`, 400));
+			return next(new AppError(`Token is Invalid or expired!`, 501));
 		}
 
 		userRequest.password = req.body.password;
@@ -190,7 +190,7 @@ exports.resetPassowrd = async (req, res, next) => {
 		await userRequest.save();
 
 		const token = await getToken(userRequest._id);
-		res.status(404).json({
+		res.status(200).json({
 			status: "Success",
 			U_token: token,
 			result: userRequest
@@ -199,7 +199,9 @@ exports.resetPassowrd = async (req, res, next) => {
 
 
 	} catch (error) {
-		return next(new AppError(`${error}`, 500))
+		if (error.errors.password) return next(new AppError(`${error.errors.password.message}`, 501));
+		if (error.errors.confirmPassword) return next(new AppError(`${error.errors.confirmPassword.message}`, 501));
+		return next(new AppError(`${error}`, 501))
 	}
 }
 
