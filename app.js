@@ -72,7 +72,7 @@ app.use('/', View_Router);
 
 
 // Error for no correct URL...................................
-app.all('*', (req, res, next) => {
+app.all('/*/', (req, res, next) => {
       next(new AppError(`No such ${req.originalUrl} request to proceed!`, 404));
 });
 

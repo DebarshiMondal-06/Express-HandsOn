@@ -147,8 +147,13 @@ exports.forgotpassword = async (req, res, next) => {
 		await user.save({ validateBeforeSave: false });
 
 		// // 3) send it via email 
-		const resetURL = `${req.protocol}://${req.get('host')}/api/v1/user/resetPasswordSent/${resetToken}`;
-		const message = `Forgot Your Password? Submit a Passowrd to reset your password! to \n ${resetURL}`;
+		let resetURL = '';
+		if (process.env.NODE_ENV = 'production') {
+			resetURL = `${req.protocol}://${req.get('host')}/resetPasswordSent/${resetToken}`;
+		} else {
+			resetURL = `${req.protocol}://${req.get('host')}/api/v1/user/resetPasswordSent/${resetToken}`;
+		}
+
 		await new Email(user, resetURL).sendPasswordReset();
 		res.status(200).json({
 			status: 'Success',
