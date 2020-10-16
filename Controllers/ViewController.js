@@ -6,6 +6,7 @@ const bookingModel = require('../models/Booking_model');
 
 exports.getOverview = async (req, res, next) => {
     try {
+
         const tour = await Tour.find();
         res.status(200).render('overview', {
             title: 'All Tours',

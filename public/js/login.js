@@ -1,11 +1,8 @@
 const textChange = async (id, value) => {
     return document.querySelector(id).textContent = value;
 }
-
-
 const getLogin = document.querySelector('.login--form');
 const getSignup = document.querySelector('.signup--form');
-
 
 const getValue = (id) => {
     return document.getElementById(id).value;
@@ -33,12 +30,14 @@ const auth = async (data, type) => {
     } catch (error) {
         if (error.response.data.status === 'error') {
             alert(error.response.data.message)
-            await textChange('.text-login', 'Try Again');
+            await textChange('.text-login', `Try Again!`);
             document.getElementById("btn-dis").disabled = false
         }
         else {
             alert('Something went wrong!')
-            await textChange('.text-login', 'Try Again Later!');
+            await textChange('.textLimit', `You have exceed your Limit`)
+            await textChange('.text-login', 'Limit-exceed!');
+            document.getElementById("btn-dis").disabled = true
         }
     }
 }

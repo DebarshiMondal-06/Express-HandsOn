@@ -12,6 +12,8 @@ block content
                     label.form__label(for='password') Password
                     input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
                 .form__group
+                    label.form__label.textLimit
+                .form__group
                     button#btn-dis.btn.btn--green.text-login Login
                 .forgot-pass
                     a.forgot-link(href="/forgot-password") Forgot Password?

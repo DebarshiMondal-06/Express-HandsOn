@@ -1478,3 +1478,9 @@ button.btn.btn-outline-success:hover{
   font-weight: bold;
   text-shadow: 0 0.7rem 0.7rem rgba(0, 0, 0, 0.5);
 }
+
+.textLimit{
+  color: red;
+  text-align: center;
+  font-size: 1.6em;
+}

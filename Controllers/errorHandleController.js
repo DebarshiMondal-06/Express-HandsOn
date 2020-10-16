@@ -6,11 +6,16 @@ const getDevError = (error, res) => {
       });
 }
 
-const getProdError = (error, res) => {
+const getProdError = (error, req, res) => {
+      let limit;
+      if (req.rateLimit) {
+            limit = req.rateLimit.remaining;
+      }
       if (error.status === 'error') {
             res.status(error.statusCode).json({
                   message: error.message,
-                  status: 'error'
+                  status: 'error',
+                  limit
             });
       }
       res.status(error.statusCode).render(`error-404`, {
@@ -28,7 +33,7 @@ module.exports.errorfunction = (error, req, res, next) => {
             getDevError(error, res);
       }
       else if (process.env.NODE_ENV === "production") {
-            getProdError(error, res);
+            getProdError(error, req, res);
       }
 }
 

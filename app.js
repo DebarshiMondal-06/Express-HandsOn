@@ -51,15 +51,15 @@ app.use(xss());
 // Prevent paramete pollution............
 app.use(hpp());
 
+app.use(compression());
 const limiter = rateLimit({
-      max: 50,
+      max: 6,
       windowMs: 60 * 60 * 1000,
       message: 'Too many Request from this IP! Please try again in an hour!'
 });
 // For Rate limiting for APIs.
-app.use('/', limiter);
-
-app.use(compression());
+app.use('/api/v1/users/login', limiter);
+app.use('/api/v1/users/signup', limiter);
 
 // Routes Mounting .................................
 app.use('/api/v1/tours', Tour_Router);
