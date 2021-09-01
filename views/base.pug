@@ -1,0 +1,29 @@
+html(lang="en")
+    head
+        block head
+            title Natours | #{title}
+            meta(charset="UTF-8")
+            meta(name="viewport" content="width=device-width, initial-scale=1.0")
+            link(rel="stylesheet" , href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+            link(rel="stylesheet" href="/css/style.css")
+            link(rel="shortcut icon", type="image/png", href="img/favicon.png")
+    body
+        // Header
+        include _header
+
+        // Content
+        block content
+            h1 This is a placeholder!
+        
+        // Footer
+        include _footer
+
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js")
+        script(src="/js/updateSetting.js")
+        script(src="/js/login.js")
+        script(src="/js/forgotpass.js")
+        script(src="/js/resetscript.js")
+       
+     
+
+

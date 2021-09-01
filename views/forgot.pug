@@ -1,0 +1,20 @@
+extends base
+
+block append head
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+block content
+  .container
+    .card.forgot
+      h5.card-header.info-color.white-text.text-center.py-4
+        strong
+          i.fas.fa-lock.fa-6x
+      .card-body.px-lg-5
+        form.text-center(style="color: #757575;").forgotpass
+          p.text-forgot Recover your password here. Type your registered email only!
+          .md-form
+          button#btn-dis.mb-5.btn.btn-outline-success.btn-rounded.btn-block.z-depth-0.my-4.waves-effect(type="submit").mb-5 Submit Here
+            input#materialSubscriptionFormEmail.form-control(type="email", placeholder="Enter Email!" required).p-3.mt-5
+  

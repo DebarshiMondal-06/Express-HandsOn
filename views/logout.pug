@@ -1,0 +1,16 @@
+extends base
+
+block append head
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.css" rel="stylesheet" />
+
+block content
+    header
+        .container.mt-5
+            .p-5.text-center.bg-light
+                if user
+                    h1.mb-3.font-weight-bold=`${user.name.split(' ')[0] } You logout`
+                    h4.mb-5 Thanks for Visiting! Hope you will be right back soon
+                    a.btn.btn-primary(href="/login" role="button") login to signIn again
+                else
+                    h1.mb-3.font-weight-bold Oops! Seems that you haven't logined
+                    a.btn.btn-primary(href="/login" role="button") login here.
