@@ -23,7 +23,7 @@ html(lang="en")
         mixin reviewCard(review)
             .reviews__card
                 .reviews__avatar
-                    img.reviews__avatar-img(src='/img/users/user-1.jpg', alt='Jim Brown')
+                    img.reviews__avatar-img(src='/img/users/default.jpg', alt='Jim Brown')
                     //- h6.reviews__user=review.whichUser.name || 'hello'
                 p.reviews__text=review.review
                 .reviews__rating
@@ -66,7 +66,7 @@ html(lang="en")
 
                         each guide in results.guides
                             .overview-box__detail
-                                img.overview-box__img(src=`/img/users/user-2.jpg`, alt=`hello`)
+                                img.overview-box__img(src=`/img/users/default.jpg`, alt=`hello`)
                                 - if(guide.role === 'lead-guide')
                                     span.overview-box__label Lead guide
                                 - if(guide.role === 'guide')

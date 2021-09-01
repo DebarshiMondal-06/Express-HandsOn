@@ -1,3 +1,8 @@
+
+const formUserData = document.querySelector('.form-user-data');
+const formUserSetting = document.querySelector('.form-user-settings');
+
+
 const updateData = async (data, type) => {
     try {
         const url = (type === 'password')
@@ -29,29 +34,31 @@ const updateData = async (data, type) => {
     }
 }
 
+if (formUserData) {
+    formUserData.addEventListener('submit', (e) => {
+        e.preventDefault();
+        document.querySelector('.textChanging').textContent = 'Updating....'
+        const form = new FormData();
+        form.append('name', document.getElementById('name').value)
+        form.append('email', document.getElementById('email').value)
+        form.append('photo', document.getElementById('photo').files[0])
+        updateData(form, 'data');
+    });
+}
 
-document.querySelector('.form-user-data').addEventListener('submit', (e) => {
-    e.preventDefault();
-    document.querySelector('.textChanging').textContent = 'Updating....'
-    const form = new FormData();
-    form.append('name', document.getElementById('name').value)
-    form.append('email', document.getElementById('email').value)
-    form.append('photo', document.getElementById('photo').files[0])
-    updateData(form, 'data');
-});
+if (formUserSetting) {
+    formUserSetting.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        document.querySelector('.btn--save-password').textContent = 'updating....'
 
-document.querySelector('.form-user-settings').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    document.querySelector('.btn--save-password').textContent = 'updating....'
+        const currentPassword = document.getElementById('password-current').value;
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('password-confirm').value;
+        await updateData({ currentPassword, password, passwordConfirm }, 'password')
 
-    const currentPassword = document.getElementById('password-current').value;
-    const password = document.getElementById('password').value;
-    const passwordConfirm = document.getElementById('password-confirm').value;
-    await updateData({ currentPassword, password, passwordConfirm }, 'password')
-
-    document.querySelector('.btn--save-password').textContent = 'Save password';
-    document.getElementById('password-current').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('password-confirm').value = '';
-});
-
+        document.querySelector('.btn--save-password').textContent = 'Save password';
+        document.getElementById('password-current').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('password-confirm').value = '';
+    });
+}

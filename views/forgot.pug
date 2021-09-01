@@ -6,15 +6,17 @@ block append head
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
 block content
-  .container
-    .card.forgot
-      h5.card-header.info-color.white-text.text-center.py-4
-        strong
-          i.fas.fa-lock.fa-6x
+  main.main
+    .login-form
+      center
+        strong.text-center
+          i.fas.fa-lock.fa-5x
       .card-body.px-lg-5
         form.text-center(style="color: #757575;").forgotpass
           p.text-forgot Recover your password here. Type your registered email only!
-          .md-form
-          button#btn-dis.mb-5.btn.btn-outline-success.btn-rounded.btn-block.z-depth-0.my-4.waves-effect(type="submit").mb-5 Submit Here
-            input#materialSubscriptionFormEmail.form-control(type="email", placeholder="Enter Email!" required).p-3.mt-5
-  
+          .form__group
+            label.form__label(for='email') Email address
+            input#email.form__input(type='email', placeholder='you@example.com', required)
+          .form__group
+            button#btn-dis.btn.btn--green.text-login(style="background-color: #55c57a; color: white")
+              h2 Submit

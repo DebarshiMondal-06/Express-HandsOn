@@ -1,5 +1,6 @@
 const stripe = Stripe('pk_test_51HZbb3EUlZ5XQUGLif8EezPUDENcXAEtHaPHuQEzg2gQqvcEXUu4i2PvCsrluOr4YZap6cWPiqYT5wWFc8NSr0eM000Z9C3aI1');
 
+const getBookTour = document.getElementById('book-tour');
 
 
 const bookTour = async (tourId) => {
@@ -16,8 +17,10 @@ const bookTour = async (tourId) => {
   }
 }
 
-document.getElementById('book-tour').addEventListener('click', (e) => {
-  e.target.textContent = 'Processing....'
-  const { tourId } = e.target.dataset;
-  bookTour(tourId);
-})
+if (getBookTour) {
+  getBookTour.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing....'
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });
+}

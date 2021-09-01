@@ -1,4 +1,6 @@
 
+const resetForm = document.querySelector('.reset--form');
+
 const reset = async (data, tokenId) => {
   try {
     const result = await axios({
@@ -21,12 +23,14 @@ const reset = async (data, tokenId) => {
   }
 }
 
-document.querySelector('.reset--form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  document.getElementById('btn-dis-reset').textContent = 'Checking...';
-  document.getElementById("btn-dis-reset").disabled = true;
-  const password = document.getElementById('passwordReset').value;
-  const confirmpass = document.getElementById('passwordResetConfirm').value;
-  const { token } = e.target.dataset;
-  await reset({ password, confirmpass }, token);
-});
+if (resetForm) {
+  resetForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('btn-dis-reset').textContent = 'Checking...';
+    document.getElementById("btn-dis-reset").disabled = true;
+    const password = document.getElementById('passwordReset').value;
+    const confirmpass = document.getElementById('passwordResetConfirm').value;
+    const { token } = e.target.dataset;
+    await reset({ password, confirmpass }, token);
+  });
+}

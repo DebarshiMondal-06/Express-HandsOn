@@ -46,7 +46,6 @@ exports.login = async (req, res, next) => {
 			return next(new AppError('Please provide Email and Password!', 404));
 		}
 		const loginuser = await User.findOne({ email, Active: { $ne: false } }).select('+password');
-		// const correct = ; // return true or false
 		if (!loginuser || !await loginuser.correctPassword(C_password, loginuser.password)) {
 			return next(new AppError(`Incorrect email or password`, 501));
 		}

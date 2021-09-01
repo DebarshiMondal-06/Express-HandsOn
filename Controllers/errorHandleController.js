@@ -8,7 +8,7 @@ const getDevError = (error, res) => {
 
 const getProdError = (error, req, res) => {
       if (error.status === 'error') {
-            res.status(error.statusCode).json({
+            return res.status(error.statusCode).json({
                   message: error.message,
                   status: 'error',
             });

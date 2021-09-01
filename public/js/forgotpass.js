@@ -1,5 +1,7 @@
+const forgotPass = document.querySelector('.forgotpass');
 
 const forgot = async (data) => {
+  console.log(data);
   try {
     const result = await axios({
       method: 'post',
@@ -21,10 +23,14 @@ const forgot = async (data) => {
   }
 }
 
-document.querySelector('.forgotpass').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  document.getElementById('btn-dis').textContent = 'Checking...';
-  document.getElementById("btn-dis").disabled = true;
-  const email = document.getElementById('materialSubscriptionFormEmail').value;
-  await forgot({ email });
-});
+if (forgotPass) {
+  forgotPass.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    document.getElementById('btn-dis').textContent = 'Checking...';
+    document.getElementById("btn-dis").disabled = true;
+    const email = document.getElementById('email').value;
+
+
+    await forgot({ email });
+  });
+}
