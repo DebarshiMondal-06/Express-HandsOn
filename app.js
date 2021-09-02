@@ -77,6 +77,6 @@ app.all('/*/', (req, res, next) => {
 });
 
 // Global errorhandle middleware........................
-app.use(errorfunction); 
+app.use(errorfunction);
 
 module.exports = app;

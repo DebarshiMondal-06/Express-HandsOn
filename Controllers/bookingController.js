@@ -42,8 +42,7 @@ exports.createBookingCheckout = async (req, res, next) => {
       bookingUser: user,
       price
     });
-    res.redirect(req.originalUrl.split('?')[0]);
-    next();
+    return res.redirect(req.originalUrl.split('?')[0]);
   } catch (error) {
     return next(new AppError(`${error}`, 500));
   }
